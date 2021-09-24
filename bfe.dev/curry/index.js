@@ -3,18 +3,31 @@ exports.join = (a, b, c) => {
 }
 
 function curry (fn) {
-  return function (...x) {
 
-    // handles the case where all arguments are given
-    if (x.length == fn.length) {
-      return fn.apply(null, x)
-    }
+  let capturedArgs = []
 
-    // ...if not, we allow partial application for *all* the remaining arguments (currying)
-    return function (...y) {
-      return fn.apply(null, x.concat(y))
+  function captureArgs (x) {
+    Array.prototype.push.apply(capturedArgs, x)
+    console.log(capturedArgs)
+  }
+
+  function partialFn (...y) {
+    // accumulate arguments
+    captureArgs(y)
+
+    if (capturedArgs.length < fn.length) {
+      // if we don't have enough arguments to call the original fn,
+      // keep partially applying
+      return partialFn
     }
-  } 
+    else {
+      // apply the original fn
+      return fn.apply(null, capturedArgs)
+    }
+  }
+
+  return partialFn
+
 }
 
 exports.curry = curry
