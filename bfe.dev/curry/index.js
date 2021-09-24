@@ -4,21 +4,17 @@ exports.join = (a, b, c) => {
 
 function curry (fn) {
 
-  let capturedArgs = []
-
-  function captureArgs (x) {
-    Array.prototype.push.apply(capturedArgs, x)
-    console.log(capturedArgs)
-  }
-
-  function partialFn (...y) {
-    // accumulate arguments
-    captureArgs(y)
+  function partialFn (...capturedArgs) {
+    // using the ... rest operator here collects
+    // all the arguments as an array
 
     if (capturedArgs.length < fn.length) {
-      // if we don't have enough arguments to call the original fn,
-      // keep partially applying
-      return partialFn
+      // If we don't have enough arguments to call the original fn,
+      // keep partially applying (asking for the remaining params)
+      return (...remainingArgs) => partialFn(...capturedArgs, ...remainingArgs)
+
+      // using the spread operator spreads the array items out as arguments
+      // like it would if we used `apply`
     }
     else {
       // apply the original fn
