@@ -12,6 +12,7 @@
  */
 export function timeToMixJuice(name) {
   var time = 0;
+
   switch(name) {
     case "Pure Strawberry Joy":
       time = 0.5;
@@ -44,25 +45,15 @@ export function timeToMixJuice(name) {
 export function limesToCut(wedgesNeeded, limes) {
   let wedgesYielded = 0;
   let toCut = 0;
-  // let yieldFromSize = {
-  //   'small
-  // }
+  let yields = {
+    'small': 6,
+    'medium': 8,
+    'large': 10
+  }
 
   while (wedgesYielded < wedgesNeeded && limes.length > 0) {
-    let size = limes.shift()
     toCut++;
-
-    switch (size) {
-      case 'small':
-        wedgesYielded += 6;
-        break;
-      case 'medium':
-        wedgesYielded += 8;
-        break;
-      case 'large':
-        wedgesYielded += 10;
-        break;
-    }
+    wedgesYielded += yields[limes.shift()]
   }
 
   return toCut;
