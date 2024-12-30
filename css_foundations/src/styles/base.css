@@ -2,7 +2,13 @@
   --color-primary: #FF7B54;
   --color-text-on-primary: #FFF;
   --font-family: "Inter", sans-serif;
+  --color-button-border: var(--color-text-on-primary);
+  --color-button-primary-bg: var(--color-text-on-primary);
+  --color-button-primary-text: var(--color-primary);
+  --color-button-secondary-bg: var(--color-primary);
+  --color-button-secondary-text: var(--color-text-on-primary);
 }
+
 
 body {
   background-color: var(--color-primary);
@@ -13,6 +19,10 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+p {
+  margin: 0;
 }
 
 .header {
