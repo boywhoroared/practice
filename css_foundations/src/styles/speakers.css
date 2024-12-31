@@ -3,3 +3,7 @@
 .icon-shopping-primary g path {
   fill: var(--color-primary);
 }
+
+.speakers .main__heading {
+  font-size: 98px;
+}
