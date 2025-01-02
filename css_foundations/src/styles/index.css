@@ -89,3 +89,7 @@
   }
 
 }
+
+.home .menu__icon path {
+  fill: var(--color-text-on-primary);
+}

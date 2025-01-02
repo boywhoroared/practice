@@ -73,3 +73,24 @@ nav {
 main {
   padding: 150px;
 }
+
+.menu__icon {
+  display: none;
+}
+
+
+@media (max-width: 840px) {
+  .menu__icon {
+    display: block;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .header {
+    /* column: icon, header text, shopping cart */
+    grid-template-columns: 33px 1fr 34px;
+    justify-items: center;
+  }
+}
