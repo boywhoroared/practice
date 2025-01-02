@@ -7,3 +7,13 @@
 .speakers .main__heading {
   font-size: 98px;
 }
+
+.speaker img {
+  width: 310px;
+  height: 310px;
+  object-fit: cover;
+}
+
+.speaker__photo--top {
+  object-position: top;
+}
