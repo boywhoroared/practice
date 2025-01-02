@@ -62,3 +62,10 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (width < 840px) {
+  .nav {
+    background-color: var(--color-text-on-primary);
+  }
+
+}

@@ -20,7 +20,7 @@ body {
   color: var(--color-text-on-primary);
 }
 
-.body--secondary  {
+.body--secondary {
   background-color: var(--color-text-on-primary);
   color: var(--color-primary);
 }
@@ -30,7 +30,8 @@ a {
   text-decoration: none;
 }
 
-p, h2 {
+p,
+h2 {
   margin: 0;
 }
 
@@ -66,7 +67,8 @@ nav {
 }
 
 .nav__list-item {
-  margin-inline-end: 36px; /* allows the margin to be applied based on the reading/writing direction of language */
+  margin-inline-end: 36px;
+  /* allows the margin to be applied based on the reading/writing direction of language */
   font-size: 20px;
 }
 
@@ -74,23 +76,67 @@ main {
   padding: 150px;
 }
 
-.menu__icon {
+.menu {
   display: none;
 }
 
+.close {
+  display: none;
+}
+
+.menu,.close { cursor: pointer; }
+
 
 @media (max-width: 840px) {
-  .menu__icon {
+  .menu {
+    display: block;
+  }
+
+  /* these hide/show classes have to come after, or in the media query, or have important because specifity? */
+  .menu--hide {
+    display: none;
+  }
+
+  .close--show {
     display: block;
   }
 
   .nav {
-    display: none;
+    /* rather than display: none; because it's more performant to move 
+    a full width element's position than it is to redraw it at new dimensions */
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--color-primary);
+    top: 60px;
+    left: -100%;
+    padding-top: 60px;
+    transition: left 0.2s linear;
+  }
+
+  .nav__list {
+    flex-direction: column;
+    justify-content: space-around;
+    height: 80%;
+  }
+
+  .nav__list-item {
+    font-size: 60px;
+    font-weight: bold;
+  }
+
+  .nav--visible {
+    left: 0;
   }
 
   .header {
     /* column: icon, header text, shopping cart */
     grid-template-columns: 33px 1fr 34px;
     justify-items: center;
+  }
+
+  .body--no-scroll {
+    /* prevent the page from being scrollable when we show the menu */
+    overflow: hidden;
   }
 }

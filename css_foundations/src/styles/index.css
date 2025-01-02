@@ -4,6 +4,11 @@
   font-size: 128px;
 }
 
+.home .menu path,
+.home .close path {
+  fill: var(--color-text-on-primary);
+}
+
 .home .main__subheading {
   font-size: 40px;
 }
@@ -87,9 +92,4 @@
     margin-top: 32px;
     flex-wrap: wrap;
   }
-
-}
-
-.home .menu__icon path {
-  fill: var(--color-text-on-primary);
 }
