@@ -7,6 +7,7 @@
   --color-button-primary-text: var(--color-primary);
   --color-button-secondary-bg: var(--color-primary);
   --color-button-secondary-text: var(--color-text-on-primary);
+  --color-text-secondary: #000;
 }
 
 
@@ -29,7 +30,7 @@ a {
   text-decoration: none;
 }
 
-p {
+p, h2 {
   margin: 0;
 }
 
