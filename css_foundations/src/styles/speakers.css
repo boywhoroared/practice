@@ -56,3 +56,9 @@
 .speaker__photo--top {
   object-position: top;
 }
+
+@media (width < 1000px) {
+  .speakers__wrapper {
+    grid-template-columns: 1fr;
+  }
+}
