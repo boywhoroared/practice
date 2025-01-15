@@ -1,0 +1,11 @@
+{
+  "name": "css-foundations",
+  "version": "1.0.0",
+  "description": "Coursework follow along project for FEM CSS Foundations",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED"
+}
