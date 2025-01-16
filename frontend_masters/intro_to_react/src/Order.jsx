@@ -114,9 +114,9 @@ export default function Order() {
         </div>
         <div className="order-pizza">
           <Pizza
-            name="Pepperoni"
-            description="Mozzarella Cheese, Pepperoni"
-            image="/public/pizzas/pepperoni.webp"
+            name={selectedPizza.name}
+            description={selectedPizza.description}
+            image={selectedPizza.image}
           />
           <p>$13.37</p>
         </div>
