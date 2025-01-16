@@ -29,6 +29,15 @@ I'll be doing less work maintain our legacy KnockoutJS
 - The `className` prop actually comes from the DOM Element API. And yes,
   coveniently worksaround the `class` keyword clash.
 
+#### Proxy IRL
+
+This project uses Vite to proxy some requests to an API and static assets
+server. In actual production, you would/could do the same thing with whatever
+you're using for ingress like NGINX.
+
+You would have some routes directed/proxied to a static server or CDN, and other
+routes to your app or services.
+
 ### Tips
 
 - Sometimes including a bit of functionality for testing as a named export can be helpful if you need to do something special with the Component.
