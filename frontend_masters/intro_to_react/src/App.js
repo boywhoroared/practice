@@ -1,10 +1,25 @@
+const Pizza = () => {
+  return React.createElement("div", {}, [
+    // createElement can take null or empty object for props
+    React.createElement("h1", null, "The Pepperoni Pizza"),
+    React.createElement("p", null, "Mozzarella Cheese, Pepperoni"),
+  ])
+}
+
 const App = () => {
   return React.createElement(
     "div",
     {},
-    React.createElement("h1", {}, "Pixel Perfect Pizzas")
+    React.createElement("h1", {}, "Padre Ginos"),
+    React.createElement(Pizza),
+    React.createElement(Pizza),
+    React.createElement(Pizza),
+    React.createElement(Pizza),
+    React.createElement(Pizza)
   );
+  // createElement can take an array or arbitrary number of arguments for children
 };
+
 
 // The above is what we ARE doing when we write JSX for components 
 // so this IS a Component
