@@ -1,8 +1,8 @@
-const Pizza = () => {
+const Pizza = (props) => {
   return React.createElement("div", {}, [
     // createElement can take null or empty object for props
-    React.createElement("h1", null, "The Pepperoni Pizza"),
-    React.createElement("p", null, "Mozzarella Cheese, Pepperoni"),
+    React.createElement("h1", null, props.name),
+    React.createElement("p", null, props.description),
   ])
 }
 
@@ -11,10 +11,27 @@ const App = () => {
     "div",
     {},
     React.createElement("h1", {}, "Padre Ginos"),
-    React.createElement(Pizza),
-    React.createElement(Pizza),
-    React.createElement(Pizza),
-    React.createElement(Pizza),
+    React.createElement(Pizza, {
+      name: "Pepperoni Pizza",
+      description: "Mozzarella Cheese, Pepperoni"
+    }),
+    React.createElement(Pizza, {
+      name: "Americano",
+      description: "French Fries and Hot Dogs"
+    }),
+    React.createElement(Pizza, {
+      name: "The Hawaiian",
+      description: "Sliced Hame, Pineapple, Mozzarella Cheese"
+    }),
+    React.createElement(Pizza, {
+      name: "Chicken Pizza",
+      description: "Chicken Nuggets on your Pizza, WTF UK?"
+    }),
+    React.createElement(Pizza, {
+      name: "The Big Meat Pizza",
+      description: "Bacon, Pepperoni, Italian Sausage, Chorizo Sausage"
+    }),
+
     React.createElement(Pizza)
   );
   // createElement can take an array or arbitrary number of arguments for children
