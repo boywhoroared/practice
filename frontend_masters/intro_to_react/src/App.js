@@ -1,13 +1,6 @@
 import React from "react"
 import { createRoot } from "react-dom/client"
-
-const Pizza = (props) => {
-  return React.createElement("div", {}, [
-    // createElement can take null or empty object for props
-    React.createElement("h1", null, props.name),
-    React.createElement("p", null, props.description),
-  ])
-}
+import Pizza from "./Pizza"
 
 const App = () => {
   return React.createElement(
