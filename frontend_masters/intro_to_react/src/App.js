@@ -1,3 +1,6 @@
+import React from "react"
+import { createRoot } from "react-dom/client"
+
 const Pizza = (props) => {
   return React.createElement("div", {}, [
     // createElement can take null or empty object for props
@@ -44,6 +47,6 @@ const App = () => {
 // Find the empty element to use as the root of the React tree
 const container = document.getElementById("root");
 // Create the root
-const root = ReactDOM.createRoot(container);
+const root = createRoot(container);
 // Render our application component
 root.render(React.createElement(App));
