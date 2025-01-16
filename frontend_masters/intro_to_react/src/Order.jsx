@@ -1,9 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pizza from "./Pizza";
+
+const intl = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "BBD",
+});
 
 export default function Order() {
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState("M");
+  const [pizzaTypes, setPizzaTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  let price, selectedPizza;
+
+  if (!loading) {
+    selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
+  }
+
+  async function fetchPizzaTypes() {
+    const response = await fetch("/api/pizzas");
+    const json = await response.json();
+    setPizzaTypes(json);
+    setLoading(false);
+  }
+
+  // https://react.dev/reference/react/useEffect#specifying-reactive-dependencies
+
+  // The first argument of useEffect is the setup function.
+  // The setup function is run before every render of the component.
+  useEffect(() => {
+    fetchPizzaTypes();
+
+    // The `return` type of `useEffect` is important.
+    //
+    // If a `function` is returned, it used as a clean-up task/effect and run
+    // before and after the component renders.
+  }, []);
+
+  // By not passing empty dependencies (an empty array `[]`) to useEffect it
+  // will only run the setup and cleanup fns once. It has no dependencies to
+  // track, as such it will never pick up any changes, and never run again.
+  //
+  // If no dependencies argument is ommitted, useEffect runs the setup and
+  // cleanup fns after every re-render.
+  //
+  // If there are dependencies, the setup and cleanup fns are run when the value
+  // of a dependency has changed between renders.
 
   return (
     <div className="order">
