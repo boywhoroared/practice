@@ -29,6 +29,18 @@ I'll be doing less work maintain our legacy KnockoutJS
 - The `className` prop actually comes from the DOM Element API. And yes,
   coveniently worksaround the `class` keyword clash.
 
+#### Performance
+
+You should be very performant on your render paths. For example, the `Pizza`
+component function body is a very hot path and is run many more times than you
+can see.
+
+Try to keep these render paths very performant because when they
+update and they're slow, they can cause things like "sticking" or "jank".
+
+You don't want to put very heavy lifting in your render paths. These are things
+like side-effects such as IO/Network requests, slow intensive computations.
+
 #### Proxy IRL
 
 This project uses Vite to proxy some requests to an API and static assets
