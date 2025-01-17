@@ -54,7 +54,7 @@ export default function Order() {
   async function checkout() {
     setLoading(true);
 
-    fetch("/api/order", {
+    await fetch("/api/order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,6 +78,7 @@ export default function Order() {
       (rather than applying the handler on the button) */}
 
         <form
+          // Add to Cart
           onSubmit={(event) => {
             event.preventDefault();
             // This could have also been `cart.push`
