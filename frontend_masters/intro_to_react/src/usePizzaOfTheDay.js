@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useDebugValue } from 'react'
+
+// Hook are simply functions!
 
 export const usePizzaOfTheDay = () => {
   const [pizza, setPizza] = useState(null);
@@ -18,6 +20,9 @@ export const usePizzaOfTheDay = () => {
 
     fetchPizzaOfTheDay();
   }, [])
+  // use [] to ensure it runs only once
+
+  useDebugValue(pizza ? `${pizza.name}` : "Loading")
 
   return pizza;
 
