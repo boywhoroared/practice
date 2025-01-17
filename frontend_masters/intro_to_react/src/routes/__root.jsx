@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import PizzaOfTheDay from "../PizzaOfTheDay";
 import Header from "../Header";
@@ -27,6 +28,7 @@ function RootComponent() {
         </div>
       </CartContext.Provider>
       <TanStackRouterDevtools />
+      <ReactQueryDevtools />
     </React.Fragment>
   );
 }
