@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Pizza from "./Pizza";
+import Cart from "./Cart";
 import currencyFormatter from "./currencyFormatter.js";
 
 const intl = currencyFormatter;
@@ -9,6 +10,7 @@ export default function Order() {
   const [pizzaSize, setPizzaSize] = useState("M");
   const [pizzaTypes, setPizzaTypes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
 
   let price, selectedPizza;
 
@@ -49,83 +51,125 @@ export default function Order() {
   // If there are dependencies, the setup and cleanup fns are run when the value
   // of a dependency has changed between renders.
 
-  return (
-    <div className="order">
-      <h2>Create Order</h2>
-      <form>
-        <div>
-          <div>
-            <label htmlFor="pizza-type">Pizza Type</label>
-            <select
-              onChange={(event) => setPizzaType(event.target.value)}
-              name="pizza-type"
-              value={pizzaType}
-            >
-              {pizzaTypes.map((pizzaType) => (
-                <option key={pizzaType.id} value={pizzaType.id}>
-                  {pizzaType.name}
-                </option>
-              ))}
-            </select>
-          </div>
+  async function checkout() {
+    setLoading(true);
 
-          {/* You *could* set an event handler on the parent div because of
+    fetch("/api/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cart,
+      }),
+    });
+
+    setCart([]);
+    setLoading(false);
+  }
+
+  return (
+    <div className="order-page">
+      <div className="order">
+        <h2>Create Order</h2>
+
+        {/* `onSubmit` is more accessible (works whenever and however the submit
+      is triggered, for example the Enter key) and is the way browsers work
+      (rather than applying the handler on the button) */}
+
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            // This could have also been `cart.push`
+            // cart.push(...)
+            // setCart(cart)
+
+            // I  think spread is the "immutable" way, because this returns a new array
+            setCart([
+              ...cart,
+              { pizza: selectedPizza, size: pizzaSize, price },
+            ]);
+          }}
+        >
+          <div>
+            <div>
+              <label htmlFor="pizza-type">Pizza Type</label>
+              <select
+                onChange={(event) => setPizzaType(event.target.value)}
+                name="pizza-type"
+                value={pizzaType}
+              >
+                {pizzaTypes.map((pizzaType) => (
+                  <option key={pizzaType.id} value={pizzaType.id}>
+                    {pizzaType.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* You *could* set an event handler on the parent div because of
           event bubbling but in this case, it's not the best solution. `div`
           semantically and accessibly wouldn't have an onChange event  */}
 
-          <div>
-            <label htmlFor="pizza-size">Pizza Size</label>
             <div>
-              <span>
-                <input
-                  onChange={(event) => setPizzaSize(event.target.value)}
-                  checked={pizzaSize === "S"}
-                  type="radio"
-                  name="pizza-size"
-                  value="S"
-                  id="pizza-s"
-                />
-                <label htmlFor="pizza-s">Small</label>
-              </span>
-              <span>
-                <input
-                  onChange={(event) => setPizzaSize(event.target.value)}
-                  checked={pizzaSize === "M"}
-                  type="radio"
-                  name="pizza-size"
-                  value="M"
-                  id="pizza-m"
-                />
-                <label htmlFor="pizza-m">Medium</label>
-              </span>
-              <span>
-                <input
-                  onChange={(event) => setPizzaSize(event.target.value)}
-                  checked={pizzaSize === "L"}
-                  type="radio"
-                  name="pizza-size"
-                  value="L"
-                  id="pizza-l"
-                />
-                <label htmlFor="pizza-l">Large</label>
-              </span>
+              <label htmlFor="pizza-size">Pizza Size</label>
+              <div>
+                <span>
+                  <input
+                    onChange={(event) => setPizzaSize(event.target.value)}
+                    checked={pizzaSize === "S"}
+                    type="radio"
+                    name="pizza-size"
+                    value="S"
+                    id="pizza-s"
+                  />
+                  <label htmlFor="pizza-s">Small</label>
+                </span>
+                <span>
+                  <input
+                    onChange={(event) => setPizzaSize(event.target.value)}
+                    checked={pizzaSize === "M"}
+                    type="radio"
+                    name="pizza-size"
+                    value="M"
+                    id="pizza-m"
+                  />
+                  <label htmlFor="pizza-m">Medium</label>
+                </span>
+                <span>
+                  <input
+                    onChange={(event) => setPizzaSize(event.target.value)}
+                    checked={pizzaSize === "L"}
+                    type="radio"
+                    name="pizza-size"
+                    value="L"
+                    id="pizza-l"
+                  />
+                  <label htmlFor="pizza-l">Large</label>
+                </span>
+              </div>
             </div>
+            <button type="submit">Add to Cart</button>
           </div>
-          <button type="submit">Add to Cart</button>
-        </div>
-        <div className="order-pizza">
           {loading ? (
             <h3>Loading&ellip;</h3>
           ) : (
-            <Pizza
-              name={selectedPizza.name}
-              description={selectedPizza.description}
-              image={selectedPizza.image}
-            />
+            <div className="order-pizza">
+              <Pizza
+                name={selectedPizza.name}
+                description={selectedPizza.description}
+                image={selectedPizza.image}
+              />
+              <p>{price}</p>
+            </div>
           )}
-          <p>{price}</p>
-        </div>
-      </form>
+        </form>
+      </div>
+      {loading ? (
+        <h2>Loading&ellip;</h2>
+      ) : (
+        <Cart checkout={checkout} cart={cart} />
+      )}
     </div>
   );
 }
