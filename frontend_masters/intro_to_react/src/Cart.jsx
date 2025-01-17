@@ -1,6 +1,4 @@
-import currencyFormatter from "./currencyFormatter.js";
-
-const intl = currencyFormatter;
+import { formatCurrency } from "./currencyFormatter.js";
 
 export default function Cart({ cart, checkout }) {
   // the `checkout` prop will be the checkout fn passed down from the Cart
@@ -26,7 +24,7 @@ export default function Cart({ cart, checkout }) {
           </li>
         ))}
       </ul>
-      <p>Total: {intl.format(total)}</p>
+      <p>Total: {formatCurrency(total)}</p>
       <button onClick={checkout}>Checkout</button>
     </div>
   );

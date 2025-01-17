@@ -5,8 +5,7 @@ import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 
-import currencyFormatter from "../currencyFormatter";
-const intl = currencyFormatter;
+import { formatCurrency } from "../currencyFormatter";
 
 export const Route = createLazyFileRoute("/past")({
   component: PastOrdersRoute,
@@ -97,8 +96,8 @@ function PastOrdersRoute() {
                     <td>{pizza.name}</td>
                     <td>{pizza.size}</td>
                     <td>{pizza.quantity}</td>
-                    <td>{intl.format(pizza.price)}</td>
-                    <td>{intl.format(pizza.total)}</td>
+                    <td>{formatCurrency(pizza.price)}</td>
+                    <td>{formatCurrency(pizza.total)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -106,6 +105,7 @@ function PastOrdersRoute() {
           ) : (
             <p>Loading …</p>
           )}
+          {/* Because the modal is predicated on focused order, we can hide the modal by "unfocusing" */}
           <button onClick={() => setFocusedOrder()}>Close</button>
         </Modal>
       ) : null}

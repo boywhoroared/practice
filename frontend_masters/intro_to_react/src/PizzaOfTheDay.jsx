@@ -1,7 +1,5 @@
 import { usePizzaOfTheDay } from "./usePizzaOfTheDay";
-import currencyFormatter from "./currencyFormatter.js";
-
-const intl = currencyFormatter;
+import { formatCurrency } from "./currencyFormatter";
 
 const PizzaOfTheDay = () => {
   const pizza = usePizzaOfTheDay();
@@ -18,7 +16,7 @@ const PizzaOfTheDay = () => {
           <h3>{pizza.name}</h3>
           <p>{pizza.description}</p>
           <p className="pizza-of-the-day-price">
-            From: {intl.format(pizza.sizes.S)}
+            From: {formatCurrency(pizza.sizes.S)}
           </p>
         </div>
         <img

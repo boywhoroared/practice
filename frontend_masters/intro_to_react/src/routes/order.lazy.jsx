@@ -4,13 +4,11 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import Pizza from "../Pizza.jsx";
 import Cart from "../Cart.jsx";
 import { CartContext } from "../contexts.js";
-import currencyFormatter from "../currencyFormatter.js";
+import { formatCurrency } from "../currencyFormatter.js";
 
 export const Route = createLazyFileRoute("/order")({
   component: Order,
 });
-
-const intl = currencyFormatter;
 
 function Order() {
   const [pizzaType, setPizzaType] = useState("pepperoni");
@@ -24,7 +22,7 @@ function Order() {
 
   if (!loading) {
     selectedPizza = pizzaTypes.find((pizza) => pizzaType === pizza.id);
-    price = intl.format(
+    price = formatCurrency(
       selectedPizza.sizes ? selectedPizza.sizes[pizzaSize] : ""
     );
   }
