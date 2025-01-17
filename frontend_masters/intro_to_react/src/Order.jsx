@@ -10,6 +10,7 @@ export default function Order() {
   const [pizzaSize, setPizzaSize] = useState("M");
   const [pizzaTypes, setPizzaTypes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [cart, setCart] = useState([]);
 
   let price, selectedPizza;
@@ -52,7 +53,7 @@ export default function Order() {
   // of a dependency has changed between renders.
 
   async function checkout() {
-    setLoading(true);
+    setIsCheckingOut(true);
 
     await fetch("/api/order", {
       method: "POST",
@@ -67,7 +68,7 @@ export default function Order() {
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     setCart([]);
-    setLoading(false);
+    setIsCheckingOut(false);
   }
 
   return (
@@ -155,7 +156,7 @@ export default function Order() {
             <button type="submit">Add to Cart</button>
           </div>
           {loading ? (
-            <h3>Loading&ellip;</h3>
+            <h3>Loading &hellip;</h3>
           ) : (
             <div className="order-pizza">
               <Pizza
@@ -168,8 +169,10 @@ export default function Order() {
           )}
         </form>
       </div>
-      {loading ? (
-        <h2>Loading&ellip;</h2>
+      {isCheckingOut ? (
+        <h2>
+          Checking out<span>&hellip;</span>
+        </h2>
       ) : (
         <Cart checkout={checkout} cart={cart} />
       )}
