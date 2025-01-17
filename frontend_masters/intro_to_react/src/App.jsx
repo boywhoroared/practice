@@ -1,24 +1,15 @@
 import { createRoot } from "react-dom/client";
-import { useState } from "react";
+import { StrictMode } from "react";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
 
-import Order from "./Order";
-import PizzaOfTheDay from "./PizzaOfTheDay";
-import Header from "./Header";
-import { CartContext } from "./contexts";
+const router = createRouter({ routeTree });
 
 const App = () => {
-  // P/N: Notice how we are *not* destructuring the hook here.
-  const cartStateHook = useState([]);
-
   return (
-    <div>
-      {/* Apparently in React 19, you won't need the .Provider */}
-      <CartContext.Provider value={cartStateHook}>
-        <Header />
-        <Order />
-        <PizzaOfTheDay />
-      </CartContext.Provider>
-    </div>
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
   );
 };
 
