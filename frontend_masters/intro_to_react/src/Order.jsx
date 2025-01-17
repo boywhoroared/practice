@@ -64,6 +64,8 @@ export default function Order() {
       }),
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     setCart([]);
     setLoading(false);
   }
