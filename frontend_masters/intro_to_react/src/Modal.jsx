@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 const Modal = ({ children }) => {
+  const modalElementRef = useRef(null);
   const elementRef = useRef(null);
 
   if (!elementRef.current) {
@@ -10,12 +11,23 @@ const Modal = ({ children }) => {
   // after this, elementRef will always point to the same div, the one we created.
 
   useEffect(() => {
-    const modalRoot = document.getElementById("modal"); // the fixed element/container outside of our react tree
-    modalRoot.appendChild(elementRef.current);
+    if (!modalElementRef.current) {
+      modalElementRef.current = document.getElementById("modal");
+      if (modalElementRef.current == null) {
+        console.log("Create the modal element");
+        modalElementRef.current = document.createElement("div");
+        modalElementRef.current.id = "modal";
+      }
+
+      const body = document.getElementsByTagName("body").item(0);
+      body.appendChild(modalElementRef.current);
+    }
+
+    modalElementRef.current.appendChild(elementRef.current);
 
     // clean up
     return () => {
-      modalRoot.removeChild(elementRef.current);
+      modalElementRef.current.removeChild(elementRef.current);
     };
   }, []);
 
