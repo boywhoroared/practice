@@ -4,12 +4,29 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
+import ErrorBoundary from "../ErrorBoundary";
 
 import { formatCurrency } from "../currencyFormatter";
 
 export const Route = createLazyFileRoute("/past")({
-  component: PastOrdersRoute,
+  component: ErrorBoundaryWrappedPastOrdersRoute,
 });
+
+function ErrorBoundaryWrappedPastOrdersRoute(props) {
+  return (
+    <ErrorBoundary>
+      {/* 
+      Not always wise to spread props
+      It's usally better to explicitly pass the props and see what 
+      interface you're using/props being passed.
+
+      HOWEVER, for Error Boundary, as general utility, it shouldn't have
+      specific knowledge and it's fine to pass props like this.
+      */}
+      <PastOrdersRoute {...props} />
+    </ErrorBoundary>
+  );
+}
 
 function PastOrdersRoute() {
   const [focusedOrder, setFocusedOrder] = useState();
@@ -20,6 +37,14 @@ function PastOrdersRoute() {
     staleTime: 30000, // how long to keep results cached for? cache expiry?
     // there are interesting options in here like refetchOnWindowFocus lol
   });
+
+  /*
+  // Enable to have errors thrown to see the Error Boundary in action
+  const hasRNGGoddessBlessedUs = Math.random() < 0.2;
+  if (!hasRNGGoddessBlessedUs) {
+    throw new Error("The RNG Goddess has laughed at us.");
+  }
+  */
 
   // alias the key names when destructuring
   const { isLoading: isLoadingPastOrder, data: pastOrderData } = useQuery({
