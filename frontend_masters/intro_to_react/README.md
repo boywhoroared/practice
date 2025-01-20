@@ -68,6 +68,18 @@ routes to your app or services.
 - The `className` prop actually comes from the DOM Element API. And yes,
   coveniently worksaround the `class` keyword clash.
 
+### Snapshot Testing
+
+> As a side note, one place I saw some use for snapshot tests (as they can track
+> any object shape over time, not just React components) was in the backend in API
+> response shapes. We'd write a snapshot test that this API response is always
+> going to look like this and it should fail the test if it breaks. This makes it
+> very intentional every time you modify the API response (since your API clients
+> are likely relying on it being a certain shape.) Furthermore, it means the
+> frontend devs can use these snapshot files to see what the API response is going
+> to look like. Niche, but it was helpful on the one project I worked on that had
+> it.
+
 ## Tips
 
 - Sometimes including a bit of functionality for testing as a named export can be helpful if you need to do something special with the Component.
