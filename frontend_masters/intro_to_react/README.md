@@ -70,6 +70,36 @@ routes to your app or services.
 
 ### Snapshot Testing
 
+- Low effort, low confidence.
+
+  - The reason they are regarded as "low confidence" is because they are so easy to "break".  
+    Suppose you have components, nested in components, nested in components. If one those changes,
+    then your whole snapshot "breaks"
+
+    A/N: But this isn't this a problem with the scope of the test? Perhaps a
+    snapshot test on a high level component is more fragile and less useful
+    than a snapshot on lower level/smaller component.
+
+    You come back to same principles of unit testing.
+
+- Part of the problem is that the UI changes so much (iterations) during development that
+  snapshots aren't very useful. You'll always be recreating the snapshots, so
+  what is the point? where is the value?
+
+  A/N: Perhaps it's more useful as a guard for things you definitely to want to
+  break unexpectedly. So as the intructor mentions, its useful for testing the
+  shape of things.
+
+  Maybe I have some component that interacts with a third-party/external script,
+  or some kind of screen scraper/crawler that requires output in specific shape?
+  Or maybe there's part of the site layout we don't want to change?
+
+  Or even in legacy code testing. It can probably useful as guard to catch you when
+  you start to change and break things. A double check to make sure this is what you
+  really want to do?
+
+- Can be useful in cases like ensuring the shape of API responses/requests.
+
 > As a side note, one place I saw some use for snapshot tests (as they can track
 > any object shape over time, not just React components) was in the backend in API
 > response shapes. We'd write a snapshot test that this API response is always
