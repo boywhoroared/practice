@@ -1,3 +1,4 @@
+import { useFormStatus } from "react-dom";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import postContact from "../api/postContact";
@@ -10,9 +11,12 @@ function ContactRoute() {
   // useMutation means you're using mutating method such as PUT, POST, PATCH,
   // DELETE etc
 
-  // I miss TypeScript!
 
-  const formActionHandler = (formData) => {
+  const formActionHandler = async (formData) => {
+    // inject a pause so we make the form take a while 
+    // to submit and see the use of the useFormStatus 
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     return postContact(
       formData.get("name"),
       formData.get("email"),
@@ -43,8 +47,8 @@ function ContactRoute() {
       ) : (
         <form action={mutation.mutate}>
           {/* we register the `mutation.mutate` (that is submitHandler), to the submit event handler */}
-          <input name="name" placeholder="Name" />
-          <input type="email" name="email" placeholder="Email" />
+          <ContactInput name="name" placeholder="Name" />
+          <ContactInput type="email" name="email" placeholder="Email" />
           <textarea placeholder="Message" name="message"></textarea>
           <button type="submit">Submit</button>
         </form>
@@ -52,3 +56,17 @@ function ContactRoute() {
     </div>
   );
 }
+
+// See <https://react.dev/reference/react-dom/hooks/useFormStatus>
+function ContactInput(props) {
+  const { pending } = useFormStatus();
+  return (
+    <input
+      disabled={pending}
+      name={props.name}
+      type={props.type}
+      placeholder={props.placeholder}
+    />
+  );
+}
+
