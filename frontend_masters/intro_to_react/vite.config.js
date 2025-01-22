@@ -15,12 +15,5 @@ export default defineConfig({
       }
     }
   },
-  plugins: [TanStackRouterVite(), react()],
-  test: {
-    environment: "happy-dom",
-    coverage: {
-      reporter: ["text", "json", "html"],
-      provider: "v8" // this is the default, so I don't need to specify it here
-    }
-  }
+  plugins: [TanStackRouterVite(), react()]
 })

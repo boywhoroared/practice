@@ -54,6 +54,13 @@ you're using for ingress like NGINX.
 You would have some routes directed/proxied to a static server or CDN, and other
 routes to your app or services.
 
+### Testing
+
+- Test actual user experiences, not the implementation details.
+  Examples:
+  - Make your test click the button rather than invoke the onClick handler directly.
+  - Don't test your function calls other functions most of the time. Most of the time you don't need to test at this level.
+
 ## Anecodotes
 
 - Vite is pronoucned "veet". Supposed to be French for "quick", or an allusion
