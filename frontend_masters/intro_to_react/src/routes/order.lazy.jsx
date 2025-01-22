@@ -76,6 +76,11 @@ function Order() {
     setIsCheckingOut(false);
   }
 
+  const formAction = () => {
+    // I  think spread is the "immutable" way, because this returns a new array
+    setCart([...cart, { pizza: selectedPizza, size: pizzaSize, price }]);
+  }
+
   return (
     <div className="order-page">
       <div className="order">
@@ -87,18 +92,7 @@ function Order() {
 
         <form
           // Add to Cart
-          onSubmit={(event) => {
-            event.preventDefault();
-            // This could have also been `cart.push`
-            // cart.push(...)
-            // setCart(cart)
-
-            // I  think spread is the "immutable" way, because this returns a new array
-            setCart([
-              ...cart,
-              { pizza: selectedPizza, size: pizzaSize, price },
-            ]);
-          }}
+          action={formAction}
         >
           <div>
             <div>

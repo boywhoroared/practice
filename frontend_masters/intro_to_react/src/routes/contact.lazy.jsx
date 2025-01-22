@@ -12,17 +12,7 @@ function ContactRoute() {
 
   // I miss TypeScript!
 
-  /**
-   * A fn that we're going to use as the mutation fn and form's submit handler.
-   *
-   * @param {React.FormEvent<HTMLFormElement>} event - The form submission event.
-   * @returns {Promise}
-   */
-  const submitHandler = (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.target);
-
+  const formActionHandler = (formData) => {
     return postContact(
       formData.get("name"),
       formData.get("email"),
@@ -32,7 +22,7 @@ function ContactRoute() {
 
   const mutation = useMutation({
     // We are going to use this fn as an event handler for the form's submit event
-    mutationFn: submitHandler, // we can access this later with `mutation.mutate`
+    mutationFn: formActionHandler, // we can access this later with `mutation.mutate`
 
     // Cool:
     // You can use `onMutate` callback, that receives same arguments as `mutationFn`,
@@ -51,7 +41,7 @@ function ContactRoute() {
       {mutation.isSuccess ? (
         <h3>Submitted!</h3>
       ) : (
-        <form onSubmit={mutation.mutate}>
+        <form action={mutation.mutate}>
           {/* we register the `mutation.mutate` (that is submitHandler), to the submit event handler */}
           <input name="name" placeholder="Name" />
           <input type="email" name="email" placeholder="Email" />
