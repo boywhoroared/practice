@@ -14,7 +14,7 @@ export default function Cart({ cart, checkout }) {
 
   return (
     <div className="cart">
-      <h2>Fart</h2>
+      <h2>Cart</h2>
       <ul>
         {cart.map((item, index) => (
           <li key={index}>

@@ -21,7 +21,7 @@ exports[`snapshot with nothing in cart 1`] = `
     class="cart"
   >
     <h2>
-      Fart
+      Cart
     </h2>
     <ul />
     <p>
