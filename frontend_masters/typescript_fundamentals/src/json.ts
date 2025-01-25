@@ -1,8 +1,8 @@
 // Exercise: Create type for JSON
 
-type JSONObject = any
-type JSONArray = any
-type JSONValue = any
+type JSONObject = {[k:string]: JSONValue}
+type JSONArray = JSONValue[]
+type JSONValue = string | number | boolean | JSONObject | JSONArray | null; 
 
 ////// DO NOT EDIT ANY CODE BELOW THIS LINE //////
 function isJSON(arg: JSONValue) {}
