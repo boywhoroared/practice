@@ -1,0 +1,21 @@
+{
+  "name": "grokking_simplicity",
+  "version": "1.0.0",
+  "description": "Working through exercises and concepts from Grokking Simplicity",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^3.0.0",
+    "eslint": "^9.19.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "vitest": "^3.0.4"
+  }
+}
