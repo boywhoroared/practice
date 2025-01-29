@@ -87,10 +87,107 @@ In the expression: [1, 2, 'a', 3, 'b', 'c', 4]
 In an equation for `it_a2iGG':
     it_a2iGG = [1, 2, 'a', 3, 'b', 'c', 4]
 
+-}
+
+-- Strings are just syntactic sugar for lists of characters!
+{-
 >>> "hello" == ['h','e','l','l','o']
--- strings are just syntactic sugar for lists of characters!
+-}
+
+-- Joining Lists
+{-
+>>> [1,2,3,4] ++ [9,10,11,12]  
+>>> "hello" ++ " " ++ "world"  
+>>> ['w','o'] ++ ['o','t']  
+-}
+
+-- NOTE: Be careful using the ++ operator repeatedly to concatenate lists
+-- Haskell has to traverse the whole list on the LHS of the ++ 
+-- and then join the second list to it. When dealing with lists
+-- that aren't too big, it's fine but if you're working with a list 
+-- of 50 million entries, Haskell will take a while 
+-- This is because Haskell uses linked lists internally
+
+-- However inserting elements at the beginning of a list is 
+-- instant. This uses the cons (hey! lisp!) operator ':'
+
+
+-- JavaScript is different. JS uses a Stack data structure,
+-- so Array.push is fast (usually) but Array.unshift (cons)
+-- is more expensive.
+
+-- Cons
+{-
+>>> 'A':" SMALL CAT"  
+>>> 5:[1,2,3,4,5]  
+"A SMALL CAT"
+[5,1,2,3,4,5]
+-}
+
+-- [1,2,3] is actually syntactic sugar for 1:2:3:[]
+
+-- Indexing into lists
+-- Use the !! operator/function
+
+{-
+>>> "Steve Buscemi" !! 6  
+>>> [9.4,33.2,96.2,11.2,23.25] !! 1  
+-}
+
+-- Lists can contain lists
+-- But lists can't contain different types, so a list with a nested list
+-- must be all nested list items.
+
+{-
+>>> b = [[1,2,3,4],[5,3,3,3],[1,2,2,3,4],[1,2,3]]   
+>>> b
+>>> b ++ [[1,1,1,1]]
+[[1,2,3,4],[5,3,3,3],[1,2,2,3,4],[1,2,3]]
+[[1,2,3,4],[5,3,3,3],[1,2,2,3,4],[1,2,3],[1,1,1,1]]
+>>> [6,6,6]:b
+[[6,6,6],[1,2,3,4],[5,3,3,3],[1,2,2,3,4],[1,2,3]]
+-}
+
+-- Lists can be compared but **LEXICOGRAPHICALLY**
+-- Haskell compares each pair of items from the list
+-- ONLY if the first pair of elements are equal, then it 
+-- continues to compare the second pair
+
+-- See also <https://stackoverflow.com/a/3651214>
+
+{-
+>>> [3,2,1] > [2,1,0]  
+>>> [3,2,1] > [2,10,100]  
+>>> [3,4,2] > [3,4]  
+>>> [3,4,2] > [2,4]  
+>>> [3,4,2] == [3,4,2]  
+True
+True
+True
+True
 True
 -}
 
+-- [3,2,1] > [2,10,100] results in True because
+-- 3 > 2 is True. Haskell stops comparing at this 
+-- point because it got a True result. 
+
+-- This will result in false because 3 == 3 
+-- So Haskell moves on to evaluate 2 > 10 which is False
+-- and the comparison stops because we have a result
+-- >>> [3,2,1] > [3,10,100]
+-- False
 
 
+-- List Operations
+-- First elment of list
+-- >>> head [5,4,3,2,1]
+
+-- Tail - removes head, gives you the tail
+-- >>> tail [5,4,3,2,1]
+
+-- Last gives you the actual last element
+-- >>> last - gives you the last element
+
+-- init returns everything but the last element (opposite of tail ) 
+-- >>> init [5,4,3,2,1]
