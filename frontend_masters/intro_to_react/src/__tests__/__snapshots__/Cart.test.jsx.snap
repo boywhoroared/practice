@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`API snaphot 1`] = `
+{
+  "category": "Supreme",
+  "description": "Pizza from Calabria",
+  "id": "calabrese",
+  "image": "/public/pizzas/calabrese.webp",
+  "name": "The Calabrese Pizza",
+  "size": {
+    "L": 20.25,
+    "M": 16.25,
+    "S": 12.25,
+  },
+}
+`;
+
+exports[`snapshot with nothing in cart 1`] = `
+<DocumentFragment>
+  <div
+    class="cart"
+  >
+    <h2>
+      Cart
+    </h2>
+    <ul />
+    <p>
+      Total: BBD 0.00
+    </p>
+    <button>
+      Checkout
+    </button>
+  </div>
+</DocumentFragment>
+`;
