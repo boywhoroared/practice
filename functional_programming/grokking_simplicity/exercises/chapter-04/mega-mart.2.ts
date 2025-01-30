@@ -1,14 +1,24 @@
 // Extract calculations from actions
 
+type CartItem = {
+  name: string,
+  price: number
+}
+
 const shopping_cart = []; // action - assign global 
 let shopping_cart_total = 0; // action - assign global
 
 function add_item_to_cart(name, price) {
-  shopping_cart.push({
-    name: name,
-    price: price
-  }); // action: Write to global state
+  add_item(shopping_cart, name, price); // action: Write to global state
   calc_cart_total(); // action: This fn creates side-effects
+}
+
+// Extracted from `add_item_to_cart`
+function add_item(cart: CartItem[], name: string, price: number) {
+  cart.push({
+    name,
+    price
+  }); 
 }
 
 function calc_cart_total() {
