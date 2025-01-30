@@ -72,7 +72,11 @@ function update_shipping_icons() {
 }
 
 function update_tax_dom() {
-  set_tax_dom(shopping_cart_total * 0.10); //action: updates dom
+  set_tax_dom(calc_tax(shopping_cart_total)); //action: updates dom
+}
+
+function calc_tax(amount: number): number {
+  return amount * 0.10;
 }
 
 function set_tax_dom(value: number) {
