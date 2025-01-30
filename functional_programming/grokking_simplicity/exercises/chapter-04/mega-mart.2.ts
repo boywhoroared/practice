@@ -5,7 +5,13 @@ type CartItem = {
   price: number
 }
 
-const shopping_cart = []; // action - assign global 
+type Cart = CartItem[]
+
+// A better cart?
+// type ItemId = string;
+// type BetterCart = {[key: ItemId]: number} // where number is the quantiy of the item in the cart
+
+const shopping_cart: Cart = []; // action - assign global 
 let shopping_cart_total = 0; // action - assign global
 
 function add_item_to_cart(name, price) {
@@ -15,10 +21,24 @@ function add_item_to_cart(name, price) {
 
 // Extracted from `add_item_to_cart`
 function add_item(cart: CartItem[], name: string, price: number) {
-  cart.push({
-    name,
-    price
-  }); 
+  // The book does this using:
+  // let new_cart = cart.slice();
+  // new_cart.push({ name: name, price: price })
+  const updatedCart = [{name, price}, ...cart] // This does the same thing but nicer. 
+
+  // This copy-on-write, or rather, copy before write.
+  // It is way to implement immutability by copying the
+  // data and modifying the copy, not the original/source.
+
+  // We avoid modifying the array that was passed in.
+  // That is a side-effect that mutates data which some 
+  // other parts of the code could be using.
+
+  // If we didn't copy it, the `push` message would 
+  // modify the original array that was passed.
+
+  // return the copy
+  return updatedCart;
 }
 
 function calc_cart_total() {
