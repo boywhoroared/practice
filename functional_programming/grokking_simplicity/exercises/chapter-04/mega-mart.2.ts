@@ -64,11 +64,16 @@ function update_shipping_icons() {
   for (let i = 0; i < buy_buttons.length; i++) {
     const button = buy_buttons[i];
     const item = button.item;
-    if (item.price + shopping_cart_total >= 20) // action: reading global state
+    if (gets_free_shipping(shopping_cart_total, item.price)) // action: reading global state
       button.show_free_shipping_icon();  // action: change the world (dom)
     else
       button.hide_free_shipping_icon(); // action: change the world (dom)
   }
+}
+
+// Extracted calculation
+function gets_free_shipping(cart_total: number, price: number) {
+  return price + cart_total >= 20;
 }
 
 function update_tax_dom() {
