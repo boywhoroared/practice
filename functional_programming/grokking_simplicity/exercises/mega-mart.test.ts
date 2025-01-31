@@ -28,7 +28,7 @@ describe("Chapter 5", () => {
     })
 
 
-    update_shipping_icons();
+    update_shipping_icons(shopping_cart);
 
     expect(buy_buttons[0].hide_free_shipping_icon).not.toHaveBeenCalled()
     expect(buy_buttons[0].show_free_shipping_icon).toHaveBeenCalled()

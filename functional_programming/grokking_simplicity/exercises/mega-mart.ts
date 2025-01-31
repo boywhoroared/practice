@@ -44,7 +44,7 @@ export function add_item(cart: CartItem[], name: string, price: number) {
 function calc_cart_total() {
   shopping_cart_total = calc_total(shopping_cart); // still an action: we're writing the calculation result to a global
   set_cart_total_dom();
-  update_shipping_icons();
+  update_shipping_icons(shopping_cart);
   update_tax_dom();
 }
 
@@ -59,12 +59,12 @@ function calc_total(cart) {
   return total;
 }
 
-export function update_shipping_icons() {
+export function update_shipping_icons(cart) {
   const buy_buttons = get_buy_buttons_dom(); // action: side-effect reads from dom, is affected by what the dom is *when* it's called
   for (let i = 0; i < buy_buttons.length; i++) {
     const button = buy_buttons[i];
     const item = button.item;
-    const new_cart = add_item(shopping_cart, item.name, item.price);
+    const new_cart = add_item(cart, item.name, item.price);
     if (gets_free_shipping(new_cart))
       // action: reading global state
       button.show_free_shipping_icon(); // action: change the world (dom)
