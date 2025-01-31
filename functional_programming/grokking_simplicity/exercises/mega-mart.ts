@@ -12,11 +12,13 @@ export type Cart = CartItem[];
 // type BetterCart = {[key: ItemId]: number} // where number is the quantiy of the item in the cart
 
 export let shopping_cart: Cart = []; // action - assign global
-export let shopping_cart_total = 0; // action - assign global
 
 function add_item_to_cart(name: string, price: number) {
   shopping_cart = add_item(shopping_cart, name, price); 
-  calc_cart_total(shopping_cart); // action: This fn creates side-effects
+  const total = calc_total(shopping_cart);
+  set_cart_total_dom(total);
+  update_shipping_icons(shopping_cart);
+  update_tax_dom(total);
 }
 
 // Extracted from `add_item_to_cart`
@@ -39,15 +41,6 @@ export function add_item(cart: CartItem[], name: string, price: number) {
 
   // return the copy
   return updatedCart;
-}
-
-function calc_cart_total(cart: Cart) {
-  const total = calc_total(cart);
-  set_cart_total_dom(total);
-  update_shipping_icons(cart);
-  update_tax_dom(total);
-
-  shopping_cart_total = total;
 }
 
 // Extracted from `calc_cart_total` into a calculation
