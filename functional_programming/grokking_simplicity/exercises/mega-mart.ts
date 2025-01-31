@@ -49,7 +49,7 @@ function calc_cart_total() {
 }
 
 // Extracted from `calc_cart_total` into a calculation
-function calc_total(cart) {
+function calc_total(cart: Cart) {
   let total = 0;
   for (let i = 0; i < cart.length; i++) {
     const item = cart[i];
@@ -59,7 +59,7 @@ function calc_total(cart) {
   return total;
 }
 
-export function update_shipping_icons(cart) {
+export function update_shipping_icons(cart: Cart) {
   const buy_buttons = get_buy_buttons_dom(); // action: side-effect reads from dom, is affected by what the dom is *when* it's called
   for (let i = 0; i < buy_buttons.length; i++) {
     const button = buy_buttons[i];
@@ -73,7 +73,7 @@ export function update_shipping_icons(cart) {
 }
 
 // Extracted calculation
-export function gets_free_shipping(cart) {
+export function gets_free_shipping(cart: Cart) {
   return calc_total(cart) >= 20;
 }
 
