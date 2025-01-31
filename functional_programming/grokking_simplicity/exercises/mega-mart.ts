@@ -21,16 +21,22 @@ function add_item_to_cart(name: string, price: number) {
   update_tax_dom(total);
 }
 
+// Extracted out the concept/operation of constructing the cart item
 export function make_cart_item( name: string, price: number) {
   return { name, price }
 }
 
+function add_element_last<T>(array: T[], element: T): T[] {
+  return [...array, element]
+}
+
 // Extracted from `add_item_to_cart`
+// C I
 export function add_item(cart: CartItem[], item: CartItem) {
   // The book does this using:
   // let new_cart = cart.slice();
   // new_cart.push({ name: name, price: price })
-  const updatedCart = [ item, ...cart]; // This does the same thing but nicer.
+  const updatedCart = add_element_last(cart, item); // This does the same thing but nicer.
 
   // This copy-on-write, or rather, copy before write.
   // It is way to implement immutability by copying the
