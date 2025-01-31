@@ -54,6 +54,12 @@ function calc_total(cart: Cart) {
   return total;
 }
 
+export const totalElement = document.createElement('div');
+
+function set_cart_total_dom (total: number) {
+  totalElement.innerHTML = `$${total.toString()}` 
+}
+
 export function update_shipping_icons(cart: Cart) {
   const buy_buttons = get_buy_buttons_dom(); // action: side-effect reads from dom, is affected by what the dom is *when* it's called
   for (let i = 0; i < buy_buttons.length; i++) {
@@ -80,13 +86,11 @@ export function calc_tax(amount: number): number {
   return amount * 0.1;
 }
 
+const taxElement = document.createElement('div');
 export function set_tax_dom(value: number) {
-  console.log("Side Effect with ", value);
+  taxElement.innerHTML = `$${value.toString()}`
 }
 
-export function set_cart_total_dom(total: number) {
-  console.log("Side Effect with ", total);
-}
 
 // NOTE: I'm pretending I have DOM available
 // This is so I can verify some of these side-effecting fns actually work.
