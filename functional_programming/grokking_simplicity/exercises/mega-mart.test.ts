@@ -6,6 +6,7 @@ import {
   get_buy_buttons_dom,
   update_shipping_icons,
   shopping_cart,
+  make_cart_item
 } from "./mega-mart";
 import type { Cart, CartItem } from "./mega-mart";
 
@@ -16,7 +17,7 @@ describe("Chapter 5", () => {
       { name: "Pen", price: 2.0 },
       { name: "Shirt", price: 8.0 },
     ];
-    const cartWithoutFreeShipping: Cart = [{ name: "Book", price: 10.0 }];
+    const cartWithoutFreeShipping: Cart = [make_cart_item("Book",  10.0)];
 
     expect(gets_free_shipping(cartWithoutFreeShipping)).toBe(false);
     expect(gets_free_shipping(cartWithFreeShipping)).toBe(true);
@@ -25,8 +26,8 @@ describe("Chapter 5", () => {
   test("updates shipping icons", () => {
     // setup
     const cart = [
-      { name: "Book", price: 10.0 },
-      { name: "Pen", price: 2.0 },
+      make_cart_item("Book", 10.0),
+      make_cart_item("Pen", 2.0)
     ];
 
     buy_buttons.forEach((b) => {

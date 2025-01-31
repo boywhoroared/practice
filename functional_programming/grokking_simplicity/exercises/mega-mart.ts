@@ -14,19 +14,23 @@ export type Cart = CartItem[];
 export let shopping_cart: Cart = []; // action - assign global
 
 function add_item_to_cart(name: string, price: number) {
-  shopping_cart = add_item(shopping_cart, name, price); 
+  shopping_cart = add_item(shopping_cart, make_cart_item(name, price)); 
   const total = calc_total(shopping_cart);
   set_cart_total_dom(total);
   update_shipping_icons(shopping_cart);
   update_tax_dom(total);
 }
 
+export function make_cart_item( name: string, price: number) {
+  return { name, price }
+}
+
 // Extracted from `add_item_to_cart`
-export function add_item(cart: CartItem[], name: string, price: number) {
+export function add_item(cart: CartItem[], item: CartItem) {
   // The book does this using:
   // let new_cart = cart.slice();
   // new_cart.push({ name: name, price: price })
-  const updatedCart = [{ name, price }, ...cart]; // This does the same thing but nicer.
+  const updatedCart = [ item, ...cart]; // This does the same thing but nicer.
 
   // This copy-on-write, or rather, copy before write.
   // It is way to implement immutability by copying the
@@ -65,7 +69,7 @@ export function update_shipping_icons(cart: Cart) {
   for (let i = 0; i < buy_buttons.length; i++) {
     const button = buy_buttons[i];
     const item = button.item;
-    const new_cart = add_item(cart, item.name, item.price);
+    const new_cart = add_item(cart, make_cart_item(item.name, item.price));
     if (gets_free_shipping(new_cart))
       // action: reading global state
       button.show_free_shipping_icon(); // action: change the world (dom)
