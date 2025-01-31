@@ -11,12 +11,12 @@ export type Cart = CartItem[];
 // type ItemId = string;
 // type BetterCart = {[key: ItemId]: number} // where number is the quantiy of the item in the cart
 
-export const shopping_cart: Cart = []; // action - assign global
+export let shopping_cart: Cart = []; // action - assign global
 export let shopping_cart_total = 0; // action - assign global
 
-function add_item_to_cart(name, price) {
-  add_item(shopping_cart, name, price); // action: Write to global state
-  calc_cart_total(); // action: This fn creates side-effects
+function add_item_to_cart(name: string, price: number) {
+  shopping_cart = add_item(shopping_cart, name, price); 
+  calc_cart_total(shopping_cart); // action: This fn creates side-effects
 }
 
 // Extracted from `add_item_to_cart`
@@ -41,11 +41,13 @@ export function add_item(cart: CartItem[], name: string, price: number) {
   return updatedCart;
 }
 
-function calc_cart_total() {
-  shopping_cart_total = calc_total(shopping_cart); // still an action: we're writing the calculation result to a global
-  set_cart_total_dom();
-  update_shipping_icons(shopping_cart);
-  update_tax_dom();
+function calc_cart_total(cart: Cart) {
+  const total = calc_total(cart);
+  set_cart_total_dom(total);
+  update_shipping_icons(cart);
+  update_tax_dom(total);
+
+  shopping_cart_total = total;
 }
 
 // Extracted from `calc_cart_total` into a calculation
@@ -77,8 +79,8 @@ export function gets_free_shipping(cart: Cart) {
   return calc_total(cart) >= 20;
 }
 
-function update_tax_dom() {
-  set_tax_dom(calc_tax(shopping_cart_total)); //action: updates dom
+function update_tax_dom(amount: number) {
+  set_tax_dom(calc_tax(amount)); //action: updates dom
 }
 
 export function calc_tax(amount: number): number {
@@ -89,8 +91,8 @@ export function set_tax_dom(value: number) {
   console.log("Side Effect with ", value);
 }
 
-export function set_cart_total_dom() {
-  console.log("Side Effect with ");
+export function set_cart_total_dom(total: number) {
+  console.log("Side Effect with ", total);
 }
 
 // NOTE: I'm pretending I have DOM available
