@@ -11,8 +11,8 @@ export type Cart = CartItem[];
 // type ItemId = string;
 // type BetterCart = {[key: ItemId]: number} // where number is the quantiy of the item in the cart
 
-const shopping_cart: Cart = []; // action - assign global
-let shopping_cart_total = 0; // action - assign global
+export const shopping_cart: Cart = []; // action - assign global
+export let shopping_cart_total = 0; // action - assign global
 
 function add_item_to_cart(name, price) {
   add_item(shopping_cart, name, price); // action: Write to global state
@@ -93,25 +93,31 @@ export function set_cart_total_dom() {
   console.log("Side Effect with ");
 }
 
+// NOTE: I'm pretending I have DOM available
+// This is so I can verify some of these side-effecting fns actually work.
+
 interface BuyButton extends HTMLButtonElement {
   item: { name: string; price: number };
   hide_free_shipping_icon: () => void;
   show_free_shipping_icon: () => void;
 }
 
-export function get_buy_buttons_dom(): BuyButton[] {
-  const createBuyButton = (item: CartItem) => {
-    const button = new HTMLButtonElement() as BuyButton;
-    Object.assign(button, {
-      item: {...item},
-      hide_free_shipping_icon: () => {},
-      show_free_shipping_icon: () => {}
-    })
-    return button;
-  };
+export const createBuyButton = (item: CartItem) => {
+  const button = document.createElement('button') as BuyButton;
+  Object.assign(button, {
+    item: {...item},
+    hide_free_shipping_icon: () => {},
+    show_free_shipping_icon: () => {}
+  })
+  return button;
+};
 
-  return [
-    createBuyButton({ name: "Book", price: 10.0 }),
-    createBuyButton({ name: "Shoes", price: 15.0 }),
-  ];
+export const buy_buttons = [
+  createBuyButton({ name: "Book", price: 10.0 }),
+  createBuyButton({ name: "Shoes", price: 15.0 }),
+  createBuyButton({ name: "Pen", price: 2.0 }),
+];
+
+export function get_buy_buttons_dom(): BuyButton[] {
+  return buy_buttons;
 }
