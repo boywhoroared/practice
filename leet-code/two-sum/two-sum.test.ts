@@ -1,5 +1,5 @@
 import { expect, test } from "vitest"
-import { twoSum } from "./two-sum"
+import { twoSum } from "./two-sum-map"
 
 test.each([
   { nums: [2,7,11,15], result: [0,1], target: 9},
