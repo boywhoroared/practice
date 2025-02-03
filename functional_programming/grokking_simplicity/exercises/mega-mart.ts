@@ -65,10 +65,10 @@ function calc_total(cart: Cart) {
   return total;
 }
 
-export const totalElement = document.createElement('div');
+export const totalElement = document.createElement("div");
 
-function set_cart_total_dom (total: number) {
-  totalElement.innerHTML = `$${total.toString()}` 
+function set_cart_total_dom(total: number) {
+  totalElement.innerHTML = `$${total.toString()}`;
 }
 
 // I B
@@ -99,19 +99,19 @@ export function gets_free_shipping(cart: Cart) {
   return calc_total(cart) >= 20;
 }
 
-function update_tax_dom(amount: number) {
-  set_tax_dom(calc_tax(amount)); //action: updates dom
-}
-
+// B
 export function calc_tax(amount: number): number {
   return amount * 0.1;
 }
 
-const taxElement = document.createElement('div');
-export function set_tax_dom(value: number) {
-  taxElement.innerHTML = `$${value.toString()}`
+function update_tax_dom(amount: number) {
+  set_tax_dom(calc_tax(amount)); //action: updates dom
 }
 
+const taxElement = document.createElement("div");
+export function set_tax_dom(value: number) {
+  taxElement.innerHTML = `$${value.toString()}`;
+}
 
 // NOTE: I'm pretending I have DOM available
 // This is so I can verify some of these side-effecting fns actually work.
@@ -123,12 +123,12 @@ interface BuyButton extends HTMLButtonElement {
 }
 
 export const createBuyButton = (item: CartItem) => {
-  const button = document.createElement('button') as BuyButton;
+  const button = document.createElement("button") as BuyButton;
   Object.assign(button, {
-    item: {...item},
+    item: { ...item },
     hide_free_shipping_icon: () => {},
-    show_free_shipping_icon: () => {}
-  })
+    show_free_shipping_icon: () => {},
+  });
   return button;
 };
 
