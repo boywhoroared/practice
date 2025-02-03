@@ -54,6 +54,20 @@ export function add_item(cart: CartItem[], item: CartItem) {
   return updatedCart;
 }
 
+function remove_item_by_name(cart: Cart, name: string) {
+  let index:number | null = null;
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].name === name) {
+      index = i;
+    }
+  }
+
+  if (index !== null) {
+    cart.splice(index, 1)
+  }
+
+}
+
 // Extracted from `calc_cart_total` into a calculation
 function calc_total(cart: Cart) {
   let total = 0;
