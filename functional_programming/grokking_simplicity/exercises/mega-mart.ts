@@ -14,20 +14,21 @@ export type Cart = CartItem[];
 export let shopping_cart: Cart = []; // action - assign global
 
 function add_item_to_cart(name: string, price: number) {
-  shopping_cart = add_item(shopping_cart, make_cart_item(name, price)); 
+  shopping_cart = add_item(shopping_cart, make_cart_item(name, price));
   const total = calc_total(shopping_cart);
   set_cart_total_dom(total);
-  update_shipping_icons(shopping_cart);
+  // Changed because extracting buttons from update_shipping_icons
+  update_shipping_icons(shopping_cart, get_buy_buttons_dom());
   update_tax_dom(total);
 }
 
 // Extracted out the concept/operation of constructing the cart item
-export function make_cart_item( name: string, price: number) {
-  return { name, price }
+export function make_cart_item(name: string, price: number) {
+  return { name, price };
 }
 
 function add_element_last<T>(array: T[], element: T): T[] {
-  return [...array, element]
+  return [...array, element];
 }
 
 // Extracted from `add_item_to_cart`
@@ -70,16 +71,26 @@ function set_cart_total_dom (total: number) {
   totalElement.innerHTML = `$${total.toString()}` 
 }
 
-export function update_shipping_icons(cart: Cart) {
-  const buy_buttons = get_buy_buttons_dom(); // action: side-effect reads from dom, is affected by what the dom is *when* it's called
+// I B
+export function update_shipping_icons(cart: Cart, buy_buttons: BuyButton[]) {
   for (let i = 0; i < buy_buttons.length; i++) {
     const button = buy_buttons[i];
     const item = button.item;
-    const new_cart = add_item(cart, make_cart_item(item.name, item.price));
-    if (gets_free_shipping(new_cart))
-      // action: reading global state
-      button.show_free_shipping_icon(); // action: change the world (dom)
-    else button.hide_free_shipping_icon(); // action: change the world (dom)
+    const has_free_shipping = gets_free_shipping_with_item(cart, item);
+    set_free_shipping_icon(button, has_free_shipping);
+  }
+}
+
+export function gets_free_shipping_with_item(cart: Cart, item: CartItem) {
+  const new_cart = add_item(cart, item);
+  return gets_free_shipping(new_cart);
+}
+
+export function set_free_shipping_icon(button: BuyButton, isShown: boolean) {
+  if (isShown) {
+    button.show_free_shipping_icon();
+  } else {
+    button.hide_free_shipping_icon();
   }
 }
 
