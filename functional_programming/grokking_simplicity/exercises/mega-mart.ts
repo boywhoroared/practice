@@ -159,3 +159,11 @@ export const buy_buttons = [
 export function get_buy_buttons_dom(): BuyButton[] {
   return buy_buttons;
 }
+
+function delete_handler(name) {
+  remove_item_by_name(shopping_cart, name);
+  const total = calc_total(shopping_cart);
+  set_cart_total_dom(total);
+  update_shipping_icons(shopping_cart);
+  update_tax_dom(total);
+}
