@@ -56,20 +56,19 @@ export function add_item(cart: CartItem[], item: CartItem) {
 
 // A List is not a great way to implement a Cart
 function remove_item_by_name(cart: Cart, name: string) {
-  const updated_cart = [ ...cart ];
-
   let index: number | null = null;
   for (let i = 0; i < cart.length; i++) {
-    if (updated_cart[i].name === name) {
+    if (cart[i].name === name) {
       index = i;
     }
   }
 
+  // Bonus: We don't create a copy of the array if we don't have to modify it
   if (index !== null) {
-    updated_cart.splice(index, 1);
+    return removeItems(cart, index, 1);
   }
 
-  return updated_cart;
+  return cart;
 }
 
 // Extracted from `calc_cart_total` into a calculation
@@ -166,4 +165,9 @@ function delete_handler(name) {
   set_cart_total_dom(total);
   update_shipping_icons(shopping_cart);
   update_tax_dom(total);
+}
+function removeItems<T>(array: T[], index: number, count: number) {
+  const copy = [...array]
+  copy.splice(index, count)
+  return copy;
 }
