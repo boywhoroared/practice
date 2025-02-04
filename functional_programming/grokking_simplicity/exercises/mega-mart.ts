@@ -219,4 +219,38 @@ function shift<T>(array: T[]) {
 function shift1<T>(array: T[]) {
   return [first_element(array), drop_first(array)];
 }
+
+function last_element<T>(array: T[]) {
+  const copy = [...array];
+
+  return copy.pop();
+}
+
+function drop_last<T>(array: T[]) {
+  const copy = [...array];
+  copy.pop();
+
+  return copy;
+}
+
+function pop<T>(array: T[]) {
+  return [last_element(array), drop_last(array)];
+}
+
+// This is more space efficient because we only create a single copy
+// the array.
+function pop1<T>(array: T[]) {
+  const copy = [...array];
+  const first_element = copy.pop();
+
+  return [first_element, copy];
+}
+
+function push<T>(array:T[], element: T) {
+  // (1) copy the original using the ...spread operator
+  // (2) add the element to the end of the list
+  const copy = [...array, element]
+
+  // (3) return copy
+  return copy;
 }
