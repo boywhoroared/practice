@@ -191,3 +191,37 @@ function submit_form_handler(event: SubmitEvent) {
   const email = (form.elements.namedItem("email") as HTMLInputElement).value;
   mailing_list = add_contact(mailing_list, email);
 }
+
+// Splitting a function that does read & write `.shift`
+// This is the read
+function first_element<T>(array: T[]) {
+  return array[0]
+}
+
+// This is the write 
+function drop_first<T>(array: T[]) {
+  // We're calling the `shift` for it's side-effect, so we're not using the return value
+  const copy = [...array] // make the copy so we don't mutate the original
+  copy.shift(); // now we can mutate
+
+  return copy;
+}
+
+// The alternative approach is to return 2 values (a tuple) from the function
+function shift<T>(array: T[]) {
+  const copy = [...array]
+  const first_element = copy.shift()
+
+  return [
+    first_element,
+    copy
+  ]
+}
+
+// or, we could **compose** the two functions we created to separate the read & write
+function shift1<T>(array: T[]) {
+  return [
+    first_element(array),
+    drop_first(array)
+  ]
+}
