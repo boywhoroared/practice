@@ -54,18 +54,22 @@ export function add_item(cart: CartItem[], item: CartItem) {
   return updatedCart;
 }
 
+// A List is not a great way to implement a Cart
 function remove_item_by_name(cart: Cart, name: string) {
-  let index:number | null = null;
+  const updated_cart = [ ...cart ];
+
+  let index: number | null = null;
   for (let i = 0; i < cart.length; i++) {
-    if (cart[i].name === name) {
+    if (updated_cart[i].name === name) {
       index = i;
     }
   }
 
   if (index !== null) {
-    cart.splice(index, 1)
+    updated_cart.splice(index, 1);
   }
 
+  return updated_cart;
 }
 
 // Extracted from `calc_cart_total` into a calculation
