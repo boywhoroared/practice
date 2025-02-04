@@ -173,14 +173,21 @@ function removeItems<T>(array: T[], index: number, count: number) {
 }
 
 // copy-on-write "its your turn exercise"
-let mailing_list = [];
+let mailing_list: string[] = [];
 
-function add_contact(email) {
-  mailing_list.push(email);
+function add_contact(mailing_list: string[], email: string): string[] {
+  // We already extracted a function for this!
+  // The book has you repeat the same:
+  // 
+  // copy = [...mailing_list]  // mailing_list.slice()
+  // copy.push(email)
+  // return copy.
+  // 
+  return add_element_last(mailing_list, email)
 }
 
 function submit_form_handler(event: SubmitEvent) {
   const form = event.target as HTMLFormElement;
   const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-  add_contact(email);
+  mailing_list = add_contact(mailing_list, email);
 }
