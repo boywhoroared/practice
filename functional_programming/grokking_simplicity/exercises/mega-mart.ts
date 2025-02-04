@@ -171,3 +171,16 @@ function removeItems<T>(array: T[], index: number, count: number) {
   copy.splice(index, count)
   return copy;
 }
+
+// copy-on-write "its your turn exercise"
+let mailing_list = [];
+
+function add_contact(email) {
+  mailing_list.push(email);
+}
+
+function submit_form_handler(event: SubmitEvent) {
+  const form = event.target as HTMLFormElement;
+  const email = (form.elements.namedItem("email") as HTMLInputElement).value;
+  add_contact(email);
+}
