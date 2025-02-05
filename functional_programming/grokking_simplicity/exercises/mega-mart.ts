@@ -23,6 +23,7 @@ function add_item_to_cart(name: string, price: number) {
   // Changed because extracting buttons from update_shipping_icons
   update_shipping_icons(shopping_cart, get_buy_buttons_dom());
   update_tax_dom(total);
+  black_friday_promotion(shopping_cart);
 }
 
 // C
@@ -342,4 +343,9 @@ function setQuantityByName(cart: Cart, name: string, quantity: number) {
   }
 
   return new_cart;
+}
+
+function black_friday_promotion(cart: Cart) {
+  // does side-effects here
+  cart.push({name: "Black Friday Gift", price: 100, quantity: 1 })
 }
