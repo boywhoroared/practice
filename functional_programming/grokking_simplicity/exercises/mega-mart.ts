@@ -274,10 +274,9 @@ export function arraySet<T>(array: T[], index: number, value: T) {
 // }
 
 function setPrice(item: CartItem, new_price: number) {
-  const copy = Object.assign({}, item)
-  copy.price = new_price;
+  const updatedItem = objectSet(item, 'price', new_price);
 
-  return copy;
+  return updatedItem;
 }
 
 // keyof takes an object type and produces a union of all it's keys
