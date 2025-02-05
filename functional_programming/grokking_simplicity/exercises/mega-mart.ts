@@ -267,3 +267,34 @@ export function arraySet<T>(array: T[], index: number, value: T) {
   return copy;
 }
 
+
+
+// function setPrice(item: CartItem, new_price: number) {
+//   item.price = new_price;
+// }
+
+function setPrice(item: CartItem, new_price: number) {
+  const copy = Object.assign({}, item)
+  copy.price = new_price;
+
+  return copy;
+}
+
+// keyof takes an object type and produces a union of all it's keys
+
+// ({} & T): Create an intersection of empty object & the object T
+
+// ({} & T)[keyof T]: Create a union type by getting the types of all the properties referenced by the list of keys 
+// Creating an intersection of objects is the same as `extends` but stricter
+// See <https://www.typescriptlang.org/docs/handbook/2/objects.html#intersection-types>
+
+// See <https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html>
+
+function objectSet<T>(object: T, key: keyof T, value: ({} & T)[keyof T]) {
+  // Rather than using ({} & T)[keyof T], we could use type assertion `as T`:
+  // const copy = Object.assign({}, object) as T 
+  // to tell the compiler the object produced is certainly an object of type T
+  const copy = Object.assign({}, object);
+  copy[key] = value;
+  return copy;
+}
