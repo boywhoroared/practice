@@ -28,7 +28,7 @@ export function make_cart_item(name: string, price: number) {
 }
 
 function add_element_last<T>(array: T[], element: T): T[] {
-  return [...array, element];
+  return push(array, element);
 }
 
 // Extracted from `add_item_to_cart`
@@ -178,12 +178,12 @@ let mailing_list: string[] = [];
 function add_contact(mailing_list: string[], email: string): string[] {
   // We already extracted a function for this!
   // The book has you repeat the same:
-  // 
+  //
   // copy = [...mailing_list]  // mailing_list.slice()
   // copy.push(email)
   // return copy.
-  // 
-  return add_element_last(mailing_list, email)
+  //
+  return push(mailing_list, email);
 }
 
 function submit_form_handler(event: SubmitEvent) {
@@ -233,24 +233,37 @@ function drop_last<T>(array: T[]) {
   return copy;
 }
 
-function pop<T>(array: T[]) {
+export function pop<T>(array: T[]) {
   return [last_element(array), drop_last(array)];
 }
 
 // This is more space efficient because we only create a single copy
 // the array.
-function pop1<T>(array: T[]) {
+export function pop1<T>(array: T[]) {
   const copy = [...array];
   const first_element = copy.pop();
 
   return [first_element, copy];
 }
 
-function push<T>(array:T[], element: T) {
-  // (1) copy the original using the ...spread operator
+export function push<T>(array:T[], element: T) {
+  // (1) copy the original
+  const copy = array.slice();
+
   // (2) add the element to the end of the list
-  const copy = [...array, element]
+  copy.push(element);
 
   // (3) return copy
   return copy;
+
+  // It seems destructuring is slower than using slice
+  // In this case it wouldn't matter though
 }
+
+export function arraySet<T>(array: T[], index: number, value: T) {
+  const copy = array.slice();
+  copy[index] = value;
+
+  return copy;
+}
+

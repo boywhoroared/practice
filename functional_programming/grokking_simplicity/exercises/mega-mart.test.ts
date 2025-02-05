@@ -7,6 +7,9 @@ import {
   update_shipping_icons,
   shopping_cart,
   make_cart_item,
+  pop, 
+  pop1,
+  push
 } from "./mega-mart";
 import type { Cart } from "./mega-mart";
 
@@ -44,3 +47,14 @@ describe("Chapter 5", () => {
     expect(buy_buttons[2].show_free_shipping_icon).not.toHaveBeenCalled();
   });
 });
+
+describe("copy-on-write utilities", () => {
+  test("pop", () => {
+    expect(pop([1, 2, 3])).toEqual([3, [1, 2]])
+    expect(pop1([1, 2, 3])).toEqual([3, [1, 2]])
+  })
+
+  test("push", () => {
+    expect(push([1, 2], 3)).toEqual([1, 2, 3])
+  })
+})
