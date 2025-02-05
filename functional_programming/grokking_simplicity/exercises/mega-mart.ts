@@ -12,8 +12,10 @@ export type Cart = CartItem[];
 // type ItemId = string;
 // type BetterCart = {[key: ItemId]: number} // where number is the quantiy of the item in the cart
 
+// A
 export let shopping_cart: Cart = []; // action - assign global
 
+// A
 function add_item_to_cart(name: string, price: number) {
   shopping_cart = add_item(shopping_cart, make_cart_item(name, price));
   const total = calc_total(shopping_cart);
@@ -23,11 +25,12 @@ function add_item_to_cart(name: string, price: number) {
   update_tax_dom(total);
 }
 
-// Extracted out the concept/operation of constructing the cart item
+// C
 export function make_cart_item(name: string, price: number) {
   return { name, price };
 }
 
+// C
 function add_element_last<T>(array: T[], element: T): T[] {
   return push(array, element);
 }
@@ -73,6 +76,7 @@ function remove_item_by_name(cart: Cart, name: string) {
 }
 
 // Extracted from `calc_cart_total` into a calculation
+// C I B
 function calc_total(cart: Cart) {
   let total = 0;
   for (let i = 0; i < cart.length; i++) {
@@ -83,27 +87,32 @@ function calc_total(cart: Cart) {
   return total;
 }
 
+// A
 export const totalElement = document.createElement("div");
 
+// A
 function set_cart_total_dom(total: number) {
   totalElement.innerHTML = `$${total.toString()}`;
 }
 
-// I B
+// A I B
 export function update_shipping_icons(cart: Cart, buy_buttons: BuyButton[]) {
   for (let i = 0; i < buy_buttons.length; i++) {
     const button = buy_buttons[i];
     const item = button.item;
     const has_free_shipping = gets_free_shipping_with_item(cart, item);
+    // This executes an Action, so this function becomes an Action
     set_free_shipping_icon(button, has_free_shipping);
   }
 }
 
+// C B
 export function gets_free_shipping_with_item(cart: Cart, item: CartItem) {
   const new_cart = add_item(cart, item);
   return gets_free_shipping(new_cart);
 }
 
+// A
 export function set_free_shipping_icon(button: BuyButton, isShown: boolean) {
   if (isShown) {
     button.show_free_shipping_icon();
@@ -112,27 +121,28 @@ export function set_free_shipping_icon(button: BuyButton, isShown: boolean) {
   }
 }
 
-// Extracted calculation
+// C B
 export function gets_free_shipping(cart: Cart) {
   return calc_total(cart) >= 20;
 }
 
-// B
+// C B
 export function calc_tax(amount: number): number {
   return amount * 0.1;
 }
 
+// A
 function update_tax_dom(amount: number) {
-  set_tax_dom(calc_tax(amount)); //action: updates dom
+  set_tax_dom(calc_tax(amount));
 }
 
+// A
 const taxElement = document.createElement("div");
+
+// A
 export function set_tax_dom(value: number) {
   taxElement.innerHTML = `$${value.toString()}`;
 }
-
-// NOTE: I'm pretending I have DOM available
-// This is so I can verify some of these side-effecting fns actually work.
 
 interface BuyButton extends HTMLButtonElement {
   item: { name: string; price: number };
@@ -167,9 +177,10 @@ function delete_handler(name) {
   update_shipping_icons(shopping_cart);
   update_tax_dom(total);
 }
+
 function removeItems<T>(array: T[], index: number, count: number) {
-  const copy = [...array]
-  copy.splice(index, count)
+  const copy = [...array];
+  copy.splice(index, count);
   return copy;
 }
 
@@ -247,7 +258,7 @@ export function pop1<T>(array: T[]) {
   return [first_element, copy];
 }
 
-export function push<T>(array:T[], element: T) {
+export function push<T>(array: T[], element: T) {
   // (1) copy the original
   const copy = array.slice();
 
@@ -267,8 +278,6 @@ export function arraySet<T>(array: T[], index: number, value: T) {
 
   return copy;
 }
-
-
 
 // function setPrice(item: CartItem, new_price: number) {
 //   item.price = new_price;
@@ -300,4 +309,37 @@ function objectSet<T>(object: T, key: keyof T, value: ({} & T)[keyof T]) {
   const copy = Object.assign({}, object);
   copy[key] = value;
   return copy;
+}
+
+function objectDelete<T>(object: T, key: keyof T) {
+  const copy = Object.assign({}, object);
+  delete object[key];
+
+  return copy;
+}
+
+function setPriceByName(cart: Cart, name: string, price: number) {
+  const new_cart = cart.slice();
+
+  // find item imperatively :roll eyes:
+  for (let i = 0; i < new_cart.length; i++) {
+    if (new_cart[i].name == name) {
+      new_cart[i] = setPrice(new_cart[i], price);
+    }
+  }
+
+  return new_cart;
+}
+
+function setQuantityByName(cart: Cart, name: string, quantity: number) {
+  const new_cart = cart.slice();
+
+  // find item imperatively :roll eyes:
+  for (let i = 0; i < new_cart.length; i++) {
+    if (new_cart[i].name == name) {
+      new_cart[i] = setQuantity(new_cart[i], quantity);
+    }
+  }
+
+  return new_cart;
 }
