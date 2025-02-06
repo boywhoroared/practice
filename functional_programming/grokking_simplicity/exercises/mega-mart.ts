@@ -371,6 +371,21 @@ function black_friday_promotion_safe(cart: Cart) {
   return deepCopy(cart_copy);
 }
 
+function payRollCalc(employees: object[]) {
+  //  ...pretend this fn does something with employees to create `payRollChecks`
+  const payRollChecks:object[] = employees.map(e => ({}));
+  return payRollChecks;
+}
+
+function payRollCalcSafe(employees: object[]) {
+  // 1. Deepy copy the original data
+  const unsafeCopyEmployees = deepCopy(employees)
+  // 2. Send copy to untrusted code
+  payRollCalc(unsafeCopyEmployees);
+  // 3. Copy the result
+  return deepCopy(unsafeCopyEmployees)
+}
+
 function deepCopy<T>(o: T) {
   // TODO: A deep copy, not a shared copy, of `o`
   return o;
