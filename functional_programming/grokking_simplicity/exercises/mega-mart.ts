@@ -23,7 +23,17 @@ function add_item_to_cart(name: string, price: number) {
   // Changed because extracting buttons from update_shipping_icons
   update_shipping_icons(shopping_cart, get_buy_buttons_dom());
   update_tax_dom(total);
-  black_friday_promotion(shopping_cart);
+
+  // 1. Deep Copy the data, as it leaves, before sharing it to an unsafe function
+  const cart_copy = deepCopy(shopping_cart);
+  // 2. Send the copy of the data to the unsafe function. The unsafe function will mutate the copy of the data
+  // This is so it can't change our data via the shared structure references
+  black_friday_promotion(cart_copy);
+  // 3. Create a copy of the mutated data. 
+  // This prevents the data from being unexpectedly changed by the unsafe code when we read it.
+  // For example `black_friday_promotion` might schedule some task (setTimeout or setImmediate) or Promise (like a fetch all) 
+  // that later changes the data
+  shopping_cart = deepCopy(cart_copy);
 }
 
 // C
@@ -348,4 +358,10 @@ function setQuantityByName(cart: Cart, name: string, quantity: number) {
 function black_friday_promotion(cart: Cart) {
   // does side-effects here
   cart.push({name: "Black Friday Gift", price: 100, quantity: 1 })
+}
+
+function deepCopy<T>(o: T) {
+  // TODO: A deep copy, not a shared copy, of `o`
+  return o;
+
 }
