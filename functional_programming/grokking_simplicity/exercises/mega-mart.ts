@@ -388,6 +388,15 @@ function payRollCalcSafe(employees: object[]) {
 
 function deepCopy<T>(o: T) {
   // TODO: A deep copy, not a shared copy, of `o`
-  return o;
-
+const userChanges = { 
+  subscribe: (user: object) => undefined
 }
+
+
+userChanges.subscribe((user: object) => {
+  // 1. Deep copy the data
+  const userCopy = deepCopy(user);
+  // 2. Send the copy out
+  processUser(userCopy)
+})
+
