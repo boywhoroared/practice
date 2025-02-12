@@ -400,3 +400,23 @@ userChanges.subscribe((user: object) => {
   processUser(userCopy)
 })
 
+// pg 170
+
+function freeTieClip(cart) {
+  var hasTie = false
+  var hasTieClip = false;
+  for(var i = 0; i < cart.length; i++) {
+    var item = cart[i];
+    if(item.name === "tie")
+      hasTie = true;
+    if(item.name === "tie clip")
+      hasTieClip = true;
+  }
+  if(hasTie && !hasTieClip) {
+    var tieClip = make_item("tie clip", 0);
+    return add_item(cart, tieClip);
+  }
+  return cart;
+}
+
+
