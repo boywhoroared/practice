@@ -373,50 +373,45 @@ function black_friday_promotion_safe(cart: Cart) {
 
 function payRollCalc(employees: object[]) {
   //  ...pretend this fn does something with employees to create `payRollChecks`
-  const payRollChecks:object[] = employees.map(e => ({}));
+  const payRollChecks: object[] = employees.map((e) => ({}));
   return payRollChecks;
 }
 
 function payRollCalcSafe(employees: object[]) {
   // 1. Deepy copy the original data
-  const unsafeCopyEmployees = deepCopy(employees)
+  const unsafeCopyEmployees = deepCopy(employees);
   // 2. Send copy to untrusted code
   payRollCalc(unsafeCopyEmployees);
   // 3. Copy the result
-  return deepCopy(unsafeCopyEmployees)
+  return deepCopy(unsafeCopyEmployees);
 }
 
 function deepCopy<T>(o: T) {
   // TODO: A deep copy, not a shared copy, of `o`
-const userChanges = { 
-  subscribe: (user: object) => undefined
-}
-
+const userChanges = {
+  subscribe: (user: object) => undefined,
+};
 
 userChanges.subscribe((user: object) => {
   // 1. Deep copy the data
   const userCopy = deepCopy(user);
   // 2. Send the copy out
-  processUser(userCopy)
-})
+  processUser(userCopy);
+});
 
 // pg 170
 
 function freeTieClip(cart) {
-  var hasTie = false
+  var hasTie = false;
   var hasTieClip = false;
-  for(var i = 0; i < cart.length; i++) {
+  for (var i = 0; i < cart.length; i++) {
     var item = cart[i];
-    if(item.name === "tie")
-      hasTie = true;
-    if(item.name === "tie clip")
-      hasTieClip = true;
+    if (item.name === "tie") hasTie = true;
+    if (item.name === "tie clip") hasTieClip = true;
   }
-  if(hasTie && !hasTieClip) {
+  if (hasTie && !hasTieClip) {
     var tieClip = make_item("tie clip", 0);
     return add_item(cart, tieClip);
   }
   return cart;
 }
-
-
