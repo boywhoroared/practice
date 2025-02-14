@@ -328,12 +328,10 @@ function objectDelete<T>(object: T, key: keyof T) {
 
 function setPriceByName(cart: Cart, name: string, price: number) {
   const new_cart = cart.slice();
+  const index = indexOfItem(new_cart, name)
 
-  // find item imperatively :roll eyes:
-  for (let i = 0; i < new_cart.length; i++) {
-    if (new_cart[i].name == name) {
-      new_cart[i] = setPrice(new_cart[i], price);
-    }
+  if (index) {
+    new_cart[index] = setPrice(new_cart[index], price);
   }
 
   return new_cart;
