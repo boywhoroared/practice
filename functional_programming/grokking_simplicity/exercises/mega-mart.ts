@@ -394,6 +394,28 @@ function payRollCalcSafe(employees: object[]) {
 
 function deepCopy<T>(o: T) {
   // TODO: A deep copy, not a shared copy, of `o`
+
+  // Actually, the browsers have
+  // `structuredClone`
+
+  // My rudimentary attempt, haven't tested this
+  // Probably better to use some known library version
+  // How are other objects, symbols and funtions handled?
+  if (o instanceof Array) {
+    const copy = o.slice();
+    return copy.map((v): T => deepCopy(v));
+  } else if (typeof o === "object" && o !== null) {
+    const copy: T = Object.assign({}, o) as T;
+    const keys = Object.keys(copy as object) as (keyof T)[];
+    keys.forEach((k) => {
+      copy[k] = deepCopy(copy[k]) as T[keyof T];
+    });
+    return copy;
+  } else {
+    return o;
+  }
+}
+
 const userChanges = {
   subscribe: (user: object) => undefined,
 };
