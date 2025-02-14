@@ -327,14 +327,13 @@ function objectDelete<T>(object: T, key: keyof T) {
 }
 
 function setPriceByName(cart: Cart, name: string, price: number) {
-  const new_cart = cart.slice();
-  const index = indexOfItem(new_cart, name)
+  const index = indexOfItem(cart, name)
 
   if (index) {
-    new_cart[index] = setPrice(new_cart[index], price);
+    return arraySet(cart, index, setPrice(cart[index], price))
   }
 
-  return new_cart;
+  return cart;
 }
 
 function setQuantityByName(cart: Cart, name: string, quantity: number) {
