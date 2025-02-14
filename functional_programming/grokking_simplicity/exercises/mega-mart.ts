@@ -62,12 +62,7 @@ export function add_item(cart: CartItem[], item: CartItem) {
 
 // A List is not a great way to implement a Cart
 function remove_item_by_name(cart: Cart, name: string) {
-  let index: number | null = null;
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i].name === name) {
-      index = i;
-    }
-  }
+  const index: number | null = indexOfItem(cart, name);
 
   // Bonus: We don't create a copy of the array if we don't have to modify it
   if (index !== null) {
@@ -75,6 +70,17 @@ function remove_item_by_name(cart: Cart, name: string) {
   }
 
   return cart;
+}
+
+// Extracted from remove_item_by_name
+function indexOfItem(cart: Cart, name: string) {
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].name === name) {
+      return i;
+    }
+  }
+
+  return null;
 }
 
 // Extracted from `calc_cart_total` into a calculation
