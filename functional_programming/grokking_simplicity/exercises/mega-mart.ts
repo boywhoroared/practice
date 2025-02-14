@@ -420,14 +420,6 @@ function freeTieClip(cart: Cart) {
 }
 
 function isInCart(cart: Cart, name: string) {
-  let hasItem = false
-  for (let i = 0; i < cart.length; i++) {
-    const item = cart[i];
-    if (item.name === name) {
-      hasItem = true;
-    }
-  }
-
-  return hasItem;
+  return indexOfItem(cart, name) !== null;
 }
 
