@@ -1,12 +1,11 @@
 // Extract calculations from actions
-
 export type CartItem = {
   name: string;
   price: number;
   quantity?: number;
 };
 
-export type Cart = CartItem[];
+export type Cart = { [name: string]: CartItem };
 
 // A better cart?
 // type ItemId = string;
@@ -39,48 +38,14 @@ function add_element_last<T>(array: T[], element: T): T[] {
 
 // Extracted from `add_item_to_cart`
 // C I
-export function add_item(cart: CartItem[], item: CartItem) {
-  // The book does this using:
-  // let new_cart = cart.slice();
-  // new_cart.push({ name: name, price: price })
-  const updatedCart = add_element_last(cart, item); // This does the same thing but nicer.
-
-  // This copy-on-write, or rather, copy before write.
-  // It is way to implement immutability by copying the
-  // data and modifying the copy, not the original/source.
-
-  // We avoid modifying the array that was passed in.
-  // That is a side-effect that mutates data which some
-  // other parts of the code could be using.
-
-  // If we didn't copy it, the `push` message would
-  // modify the original array that was passed.
-
-  // return the copy
+export function add_item(cart: Cart, item: CartItem) {
+  const updatedCart = objectSet(cart, item.name, item);
   return updatedCart;
 }
 
 // A List is not a great way to implement a Cart
 function remove_item_by_name(cart: Cart, name: string) {
-  const index: number | null = indexOfItem(cart, name);
-
-  // Bonus: We don't create a copy of the array if we don't have to modify it
-  if (index !== null) {
-    return removeItems(cart, index, 1);
-  }
-
-  return cart;
-}
-
-// Extracted from remove_item_by_name
-function indexOfItem(cart: Cart, name: string) {
-  for (let i = 0; i < cart.length; i++) {
-    if (cart[i].name === name) {
-      return i;
-    }
-  }
-
-  return null;
+  return objectDelete(cart, name);
 }
 
 // Extracted from `calc_cart_total` into a calculation
@@ -327,13 +292,14 @@ function objectDelete<T>(object: T, key: keyof T) {
 }
 
 function setPriceByName(cart: Cart, name: string, price: number) {
-  const index = indexOfItem(cart, name)
-
-  if (index) {
-    return arraySet(cart, index, setPrice(cart[index], price))
+  if (isInCart(cart, name)) {
+    const item = cart[name]; // probably it might make sense to have an `objectGet`?
+    const copy = setPrice(item, price);
+    return objectSet(cart, name, copy);
+  } else {
+    const item = make_cart_item(name, price);
+    return objectSet(cart, name, item);
   }
-
-  return cart;
 }
 
 function setQuantityByName(cart: Cart, name: string, quantity: number) {
@@ -439,6 +405,5 @@ function freeTieClip(cart: Cart) {
 }
 
 function isInCart(cart: Cart, name: string) {
-  return indexOfItem(cart, name) !== null;
+  return Object.prototype.hasOwnProperty.call(cart, name);
 }
-
