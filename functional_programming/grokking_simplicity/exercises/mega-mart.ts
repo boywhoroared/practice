@@ -39,8 +39,7 @@ function add_element_last<T>(array: T[], element: T): T[] {
 // Extracted from `add_item_to_cart`
 // C I
 export function add_item(cart: Cart, item: CartItem) {
-  const updatedCart = objectSet(cart, item.name, item);
-  return updatedCart;
+  return objectSet(cart, item.name, item);
 }
 
 // A List is not a great way to implement a Cart
@@ -406,4 +405,11 @@ function freeTieClip(cart: Cart) {
 
 function isInCart(cart: Cart, name: string) {
   return Object.prototype.hasOwnProperty.call(cart, name);
+}
+
+// pg 214
+function getsWatchDiscount(cart: Cart) {
+  const total = calc_total(cart);
+  const hasWatch = isInCart(cart, "watch");
+  return total > 100 && hasWatch;
 }
