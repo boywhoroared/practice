@@ -413,3 +413,21 @@ function getsWatchDiscount(cart: Cart) {
   const hasWatch = isInCart(cart, "watch");
   return total > 100 && hasWatch;
 }
+
+// pg 238 - Refactor abstraction barrier for Marketing dept.
+function setShippingByName(cart: Cart, name: string, ship: string) {}
+function setTaxByName(cart: Cart, name: string, tax: number) {}
+
+// setPriceByName
+// setQuantityByName -> setFieldByName(cart, "shoe", "quantity", 5);
+// setShippingByName
+// setTaxByName -> setTaxByName(cart, "shoe", "tax", 2.34);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setFieldByName(cart: Cart, itemName: string, field: string, value: any) {
+  const item = cart[itemName]
+  const newItem = objectSet(item, field, value);
+  const newCart = objectSet(cart, itemName, newItem);
+
+  return newCart;
+}
