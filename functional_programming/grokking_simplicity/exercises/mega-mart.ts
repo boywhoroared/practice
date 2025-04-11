@@ -12,10 +12,14 @@ export type Cart = { [name: string]: CartItem };
 // type BetterCart = {[key: ItemId]: number} // where number is the quantiy of the item in the cart
 
 // A
-export let shopping_cart: Cart = []; // action - assign global
+export let shopping_cart: Cart = create_empty_cart(); // action - assign global
+
+export function create_empty_cart() {
+  return {};
+}
 
 // A
-function add_item_to_cart(name: string, price: number) {
+export function add_item_to_cart(name: string, price: number) {
   shopping_cart = add_item(shopping_cart, make_cart_item(name, price));
   const total = calc_total(shopping_cart);
   set_cart_total_dom(total);
@@ -274,7 +278,7 @@ function setQuantity(item: CartItem, new_quantity: number) {
 
 // See <https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html>
 
-function objectSet<T>(object: T, key: keyof T, value: ({} & T)[keyof T]) {
+function objectSet(object: {}, key: string, value: unknown) {
   // Rather than using ({} & T)[keyof T], we could use type assertion `as T`:
   // const copy = Object.assign({}, object) as T
   // to tell the compiler the object produced is certainly an object of type T
@@ -423,8 +427,7 @@ function setTaxByName(cart: Cart, name: string, tax: number) {}
 // setShippingByName
 // setTaxByName -> setTaxByName(cart, "shoe", "tax", 2.34);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function setFieldByName(cart: Cart, itemName: string, field: string, value: any) {
+function setFieldByName(cart: Cart, itemName: string, field: string, value: unknown) {
   const item = cart[itemName]
   const newItem = objectSet(item, field, value);
   const newCart = objectSet(cart, itemName, newItem);
