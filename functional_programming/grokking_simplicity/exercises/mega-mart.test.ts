@@ -1,6 +1,7 @@
 import { expect, test, describe, vi } from "vitest";
 import {
   add_item,
+  create_empty_cart,
   gets_free_shipping,
   buy_buttons,
   get_buy_buttons_dom,
@@ -28,14 +29,16 @@ describe("Chapter 5", () => {
 
   test("updates shipping icons", () => {
     // setup
-    const cart = [make_cart_item("Book", 10.0), make_cart_item("Pen", 2.0)];
+    const cart = create_empty_cart()
+    add_item(cart, make_cart_item("Book", 10.0));
+    add_item(cart, make_cart_item("Pen", 2.0));
 
     buy_buttons.forEach((b) => {
       b.hide_free_shipping_icon = vi.fn(b.hide_free_shipping_icon);
       b.show_free_shipping_icon = vi.fn(b.show_free_shipping_icon);
     });
 
-    update_shipping_icons(cart);
+    update_shipping_icons(cart, buy_buttons);
 
     expect(buy_buttons[0].hide_free_shipping_icon).not.toHaveBeenCalled();
     expect(buy_buttons[0].show_free_shipping_icon).toHaveBeenCalled();

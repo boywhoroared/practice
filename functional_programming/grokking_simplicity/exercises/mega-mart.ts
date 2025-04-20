@@ -425,12 +425,42 @@ function setTaxByName(cart: Cart, name: string, tax: number) {}
 // setPriceByName
 // setQuantityByName -> setFieldByName(cart, "shoe", "quantity", 5);
 // setShippingByName
-// setTaxByName -> setTaxByName(cart, "shoe", "tax", 2.34);
+// setTaxByName -> setFieldByName(cart, "shoe", "tax", 2.34);
 
 function setFieldByName(cart: Cart, itemName: string, field: string, value: unknown) {
   const item = cart[itemName]
   const newItem = objectSet(item, field, value);
   const newCart = objectSet(cart, itemName, newItem);
+
+  return newCart;
+}
+
+// It's your turn. Refactor: Remove implicit argument
+//
+// function incrementQuantityByName(cart, name) {      ❶
+//   var item = cart[name];
+//     var quantity = item['quantity'];
+//     var newQuantity = quantity + 1;
+//     var newItem = objectSet(item, 'quantity', newQuantity);
+//     var newCart = objectSet(cart, name, newItem);
+//     return newCart;
+// }
+//
+// function incrementSizeByName(cart, name) {          ❶
+//   var item = cart[name];
+//     var size = item['size'];
+//     var newSize = size + 1;
+//     var newItem = objectSet(item, 'size', newSize);
+//     var newCart = objectSet(cart, name, newItem);
+//     return newCart;
+// }
+
+function incrementFieldByName(cart: Cart, name: string, field: string) {
+  const item = cart[name];
+  const value = item[field];
+  const newValue = value + 1;
+  const newItem = objectSet(item, 'size', newValue);
+  const newCart = objectSet(cart, name, newItem);
 
   return newCart;
 }
