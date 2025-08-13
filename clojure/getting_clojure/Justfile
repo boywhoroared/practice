@@ -1,0 +1,12 @@
+conjure:
+  clojure -M:repl/conjure
+
+repl:
+  clojure -M:repl/rebel
+
+check:
+  clojure -T:cljfmt check
+
+fix: 
+  clojure -T:cljfmt fix
+
