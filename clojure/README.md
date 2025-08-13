@@ -53,6 +53,37 @@ Only import specific symbols rather than the whole library/namespace:
 (upper-cases "clojure")
 ```
 
+### Running Clojure Tools (via :aliases) 
+
+Using tools via Clojure **aliases** was not completely obvious.
+
+See <https://www.clojure.org/reference/clojure_cli#use_tool>
+
+You can install it as a Clojure tool but then there isn't a record of it
+in your `deps.edn`. Installing it as a tool allows you use to invoke the
+tool very simply:
+
+```
+clojure -Tcljfmt check
+```
+
+If we want to invoke it via the alias in our `deps.edn`, we invoke it
+as:
+
+```
+clojure -T:cljfmt cljfmt.tool/check
+```
+
+where we specify the alias **keyword** (`:cljfmt`) and the namespace qualified
+function to run. Without the namespace, you will get an error:
+
+> Unqualified function can't be resolved.
+
+How do we know the namespace? __sigh__ You will have to look at the project's
+`deps.edn` `:tools/usage {:ns-default}`  value to find out.
+
+In this example, see <https://github.com/weavejester/cljfmt/blob/master/deps.edn>
+
 ## REPL
 
 ### Query documentation

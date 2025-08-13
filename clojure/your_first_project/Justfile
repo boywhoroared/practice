@@ -1,0 +1,6 @@
+check:
+  clojure -T:cljfmt cljfmt.tool/check
+
+fix: 
+  clojure -T:cljfmt cljfmt.tool/fix
+
