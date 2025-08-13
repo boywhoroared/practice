@@ -1,6 +1,6 @@
 check:
-  clojure -T:cljfmt cljfmt.tool/check
+  clojure -T:cljfmt check
 
 fix: 
-  clojure -T:cljfmt cljfmt.tool/fix
+  clojure -T:cljfmt fix
 
