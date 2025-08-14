@@ -134,3 +134,15 @@
 ;; Clojure does have clojure.spec but this is not the same thing
 
 ;; At this part, the book generates a new app using leiningen but I'm not going to use that.
+;; Instead, I am using deps-new
+
+;; Install the deps-new Clojure tool
+;; $ clojure -Ttools install-latest :lib io.github.seancorfield/deps-new :as new
+
+;; Create the project
+;; $ clojure -Tnew app :name blottsbooks
+
+;; The directory will be different, probably, but similar enough
+
+
+
