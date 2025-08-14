@@ -142,7 +142,8 @@
 ;; Create the project
 ;; $ clojure -Tnew app :name blottsbooks
 
-;; The directory will be different, probably, but similar enough
+;; The directory will be different, probably, but similar enough as the templates 
+;; used by deps.new are derived from projects such as leiningen and boot
 
 
 
