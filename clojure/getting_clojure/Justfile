@@ -1,8 +1,13 @@
+alias repl := rebel
+
 conjure:
   clojure -M:repl/conjure
 
-repl:
+rebel:
   clojure -M:repl/rebel
+
+nrebel:
+  clojure -M:repl/nrebel 
 
 check:
   clojure -T:cljfmt check
