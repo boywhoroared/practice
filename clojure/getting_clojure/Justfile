@@ -9,9 +9,9 @@ rebel:
 nrebel:
   clojure -M:repl/nrebel 
 
-check:
-  clojure -T:cljfmt check
+check *FLAGS:
+  clojure -T:cljfmt check -- {{FLAGS}}
 
-fix: 
-  clojure -T:cljfmt fix
+fix *FLAGS: 
+  clojure -T:cljfmt fix -- {{FLAGS}}
 
