@@ -147,7 +147,87 @@
   (throw (ex-info "Unknown book format" {:book book})))
 
 (normalise-book '("Title", "Author"))
-; Using a List rather than Vector or Map produces an IllegalArgumentException exception because `contains?` 
+; Using a List rather than Vector or Map produces an exception because `contains?` 
 ; in the dispatch method doesn't work on maps (:)
 
 ; I suppose we'd have to make the `cond` return `:default` if there aren't any matches?
+
+;; The cool thing about multimethods is that in writing the dispatch function, you can choose
+;; any criteria that you want. For example, in the USA, the copyright period is different 
+;; depending on when a book was published.
+;;
+;; If our book maps include a :published key, then we could write a multimethod that decides what
+;; to do based on the year of publication.
+
+(defn dispatch-published [book]
+  (cond
+    (< (:published book) 1928) :public-domain
+    (< (:published book) 1978) :old-copyright
+    :else :new-copyright))
+
+(defmulti compute-royalties dispatch-published)
+
+(defmethod compute-royalties :public-domain [book] 0)
+(defmethod compute-royalties :old-copyright [book]
+  ;; compute royalties based on old copyright law
+  1.5)
+
+(defmethod compute-royalties :old-copyright [book]
+  ;; compute royalties based on new copyright law
+  3)
+
+;; In a sense multimethods are generalisation of the kind of type based 
+;; polymorphism found in OO languages
+
+;; Multimethods are more general in the sense that _YOU_ get to decide the
+;; criteria to use to pick the function. You can always change the guts of the 
+;; dispatch fn to pick you implementation a different way.
+;; Or create a different multimethod that categorises its arguments in some other
+;; way.
+
+;; There is no requirement that all the bits of a multimethod have to be 
+;; defined in the same file or at the same time. You can define the multimethod
+;; and define new methods later.
+
+;; This sort of multimethod addition does have to appear in the same file or 
+;; be written by the sme programmer as the originals.
+;;
+;; Multimethods provide a great extension point for your code.
+
+;; Example of "extending". Let's say our books contained a :genre key
+
+(def books
+  [{:title "Pride and Prejudice" :author "Austen" :genre :romance}
+   {:title "World War Z" :author "Brooks" :genre :zombie}])
+
+;; This uses the :genre keyword as function to do a look up on the map.
+;; Remember that keywords can be invoked as a function with a map argument
+;; to look up the associated value in the map 
+
+;; So here, the keyword becomes the dispatch function and the result will be theo
+;; keyword's associated value (which is also a keyword in this case) and our methods
+;; will match on that
+(defmulti book-description :genre)
+
+(defmethod book-description :romance [book]
+  (str "The heart warming new romance by " (:author book))) ; use the :author keyword to lookup the actual author of the book 
+
+(defmethod book-description :zombie [book]
+  (str "The heart consuming new zombie adventure by " (:author book)))
+
+(map book-description books)
+; ("The heart warming new romance by Austen"
+;  "The heart consuming new zombie adventure by Brooks")
+
+; What if much later someone comes up with a new genre?
+
+(def ppz {:title "Pride and Prejudice  and Zombies"
+          :author "Grahame-Smith"
+          :genre :zombie-romance})
+
+; No problem, just define a new method 
+; This method doesn't have to appear in the same file
+(defmethod book-description :zombie-romance [book]
+  (str "The heart warming, and consuming, new romance by " (:author book)))
+
+(book-description ppz) ; "The heart warming, and consuming, new romance by Grahame-Smith"
