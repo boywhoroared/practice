@@ -1,6 +1,7 @@
 ;; One Function, Different Parameters
 ;; We can create overloaded functions
 
+
 (defn greet
   ([to-whom] (println "Welcome to Blotts Books" to-whom))
   ([message to-whom] (println message to-whom)))
@@ -231,3 +232,271 @@
   (str "The heart warming, and consuming, new romance by " (:author book)))
 
 (book-description ppz) ; "The heart warming, and consuming, new romance by Grahame-Smith"
+
+;; Deeply Recursive / Recursion
+;; Clojure provides specialised support for writing recursive functions. 
+;; (This is likely because this how loops are done?
+
+(def books [{:title "Jaws" :copies-sold 2000000}
+            {:title "Emma" :copies-sold 3000000}
+            {:title "2001" :copies-sold 4000000}])
+
+; If we want to know the total number of books sold, we could 
+; write (albeit naively) a recursive function to run through
+; all elements of the vector
+
+(defn sum-copies
+  ([books] (sum-copies books 0)) ; multi-arity/overloaded function parameters
+  ([books total] (if (empty? books)
+                   total ; if there are no books, return the total
+                   (sum-copies
+                    (rest books) (+ total (:copies-sold (first books)))))))
+                    ; else, add the first book's :copis-sold to the total, and recurse with the remaining books
+                    ; effectively summing the total one at a time
+
+; In the base case, `sum-copies` is invoked with the vector of books,
+; and that invokes `sum-copies` with the vector of books and current total of 0
+; It uses the "filling the defaults" trick we looked at earlier with multi-arity functions
+
+; Every time `sum-copies` recursively calls itself, it eats up stack space.
+; (Remember, every time we call a function, it goes on the stack and then we unwind the stack)
+; This is OK for a modestly sized collection of books but make the books vector too long/large
+; and you will run out of stack space: StackOverflowError
+
+; This is where specialised support for recursion comes in. Notice that:
+; - The recursive call to `sum-copies` is pretty much the last thing the function does (Is this what tail call is?)
+; - The only data flowing from one invocation of the function to the next flows through the function parameters
+
+; Given this, there is no reason to accumulate all those stack frames. 
+; We can take advantage of tail call optimisationGiven this, 
+; there is no reason to accumulate all those stack frames. 
+; We can take advantage of tail call optimisation
+
+;;ACCUMULATOR PATTERN
+;; See how we're calculating the total and then passing it to the next invocation?
+;; We are accumulating the result and this is key to tail call optimisation.
+
+;; Using `recur`
+
+(defn sum-copies
+  ([books] (sum-copies books 0))
+  ([books total]
+   (if (empty? books)
+     total
+     (recur
+      (rest books)
+      (+ total (:copies-sold (first books)))))))
+
+;; Here it seems that `recur` is replacing the explicit recursive call to `sum-copies` 
+;; `recur` knows how to take advantage of being the last expression in a function
+;; to avoid accumulating all of those stack frames
+;; Now this second version of sum-copies will work no matter how many books you are 
+;; dealing with
+
+;; recur is the clojure way of writing a completely general purpose loop. It lets you execute
+;; the same block of code over and over each time with slightly different data and break out 
+;; just when you are ready.
+
+;; One apparent downside of `recur` is we need to build a new function, or new function arity in this example,
+;; to use it. This will get old quickly (boilerplate)
+;; We can dispense with this function using the `loop` expression.
+
+(defn sum-copies [books] ;; this is also a binding. All bindings in Clojure use the vector form []
+  ; sets the intial value of `books` in the loop to `books`, initial value of `total` to `0`
+  ; (that is, it sets up the base case)
+  (loop [books books total 0] ;; [] is used as the binding form in clojure. Each pair creates a binding of symbol name to value
+    ;; `books books` bind 'books' to the value of the argument books
+    ;; `total 0` binds 'total' to the value 0 
+    (if (empty? books)
+      total
+      ;; see how recur looks like the original fn call for sum-copies?
+      ;; (rest books) is being bound to `books` in the loop, and
+      ;; the result of the expr (+ ...), the accumulate result, is being
+      ;; bound to `total`
+      (recur (rest books) (+ total (:copies-sold (first books)))))))
+
+;; `loop` and `recur` are special forms in clojure to specifically 
+;; guarantee tail call optimisation as it is not built in to Java
+
+;; `loop` is a `recur` target.
+
+;; You can think of `loop` as a blend of a phantom function and a call to that function (Something like an IIFE?)
+;; (The book suggests this idea of a phantom function, but `loop` is likely a special form/macro that creates the function internally)
+;; In the example, the "function" has two parameters `books` and `total` which are intially bound to the original 
+;; book collection and 0. 
+;;
+;; With `books` and `total` bound, we evaluate the expr in the body.  
+;; The trick is that loop works with recur. When it hits a recur inside the body of a `loop`, Clojure will reset the values
+;; bound to the symbols to values passed into recur and then recursively reevalute the `loop` body.
+
+;; `recur` is a reasonably low level tools. Chances are, there is usually a better and easier way to get your task done.
+;; For example, adding up all those book sales, you would probably write
+;
+
+(defn sum-copies3 [books] (apply + (map :copies-sold books))) ; #'user/sum-copies3
+; (map :copies-sold books) => (2000000 3000000 4000000)
+; (apply + (map :copies-sold books)) => (apply + (2000000 3000000 4000000)) => 9000000
+; `apply` takes a function as the first param, and applies it to the collection (the second parameter)
+; the collection is passed to the function (the function being applied) as it's list of arguments (rather than a single collection)
+; So, in this case, `+` variadic fn, it adds all of the numbers in the collection
+
+;; Remember that `:copies-sold` is a keyword and can be invoked as a function.
+;; This allows us to pass it to `map` as the function
+
+(sum-copies3 books) ; 9000000
+
+(require '[clojure.pprint :as pp])
+(pp/pprint books)
+
+;; DOCSTRINGS
+
+;; The docstring is the provided as the second expression/argument to the `defn` macro
+
+(defn average
+  "Return the average of a and b"
+  [a b]
+  (/ (+ a b) 2.0)) ; #'user/average
+(average 5 3)
+(doc average)
+;; Clojure will store the string along with the function. 
+;; Then you can view the docstring with the built-in `doc` macro in the repl
+;; (doc average)
+
+;; Docstrings can be used for macros and records that we'll meet later.
+
+(defn multi-average
+  "Return the average of 2 or more numbers"
+  ([a b]
+   (/  (+ a b) 2.0))
+  ([a b c]
+   (/ (+ a b c) 3.0)))
+
+;; A multi-fn with a docstring.
+;; Remember, you don't add a [] parameter list/vector after the name when creating a multi-fn
+
+;; PRE AND POST CONDITIONS
+
+;; Functions provide natural points where you can improve the reliability of your code by
+;; checking that the values passed to your function are what you expect
+
+(defn print-book [book] (prn book))
+(defn ship-book [_] (prn "Shipping Book"))
+
+;; Publish a book using the (unseen) print-book and ship-book fns
+(defn publish-book [book]
+  (when-not (contains? book :title) ; Here, we have logic within the function body to check
+    (throw (ex-info "Books must contain :title" {:book book})))
+  (print-book book)
+  (ship-book book))
+
+;; The `when-not` is checking the value of book. Clojure has a *shortcut* for this using 
+;; the `:pre` condition
+
+(defn publish-book2 [book]
+  {:pre [(:title book)]} ; Here, the pre condition simply evaluates a vector of expressions. If any are falsy, the pre-condition fails and an exception is thrown
+  (print-book book)
+  (ship-book book))
+
+;; To setup a pre-condition, just add a map after the fn arguments
+;; A map with a :pre key. The value should be a vector of expressions.
+;; You will get a runtime exception if any of the expressions evalute to 
+;; falsy when the fn is called.
+
+;; Post Condition
+(defn publish-book3 [book]
+  {:pre [(:title book)]
+  ;; Adding a post condition to ensure the value returned from the function is Boolean
+  ;; % stands in for the return value in the post condition
+   :post [(boolean? %)]}
+  (print-book book)
+  (ship-book book))
+
+;; STAYING OUT OF TROUBLE
+
+;; You can mix and match the variadic & into a multi-arity function if
+;; you are careful to avoid over-lapping arguments with other arities
+
+(defn one-two-or-more
+  ([a] (println "One arg:" a))
+  ([a b] (println "Two args:" a b))
+ ;; The arguments provided after `b` will be collected into `more`
+  ([a b & more] (println "More than two args:" a b more)))
+
+;; Clojure is sharp enough to check that you don't define a variadic 
+;; function that over-laps other arities.
+
+;; This generates a compile error
+; (err) Syntax error compiling fn* at (5-more-capable-functions.clj:428:1).
+; (err) Can't have fixed arity function with more params than variadic function
+
+; (defn one-two-or-more-will-not-compile
+;   ([a] (println "One arg:" a))
+;   ([a b] (println "Two args:" a b))
+;  ;; This should not get past the clojure compiler according to "Getting Clojure" 
+;   ([& more] (println "More than two args:" more)))
+;
+; The problem is that it's unclear which arity should be evaluated when the fn
+; is called with two parameters
+
+; (comment
+;   (one-two-or-more-will-not-compile 1 2 3))
+
+;; Be careful not to confuse a function, that has more than one expression in the body, with a multi-arity function
+;; The key is to look for the parameters which will tell you which flavour of function you have.
+
+; multiple exp in body
+(defn chatty-average
+  ([a b]
+   (println "chatty-average function called with 2 arguments")
+   (println "** first argument:" a)
+   (println "** second argument:" b)
+   (/ (+ a b) 2.0)))
+
+; multi-arity
+(defn chatty-multi-average
+  ([a b]
+   (println "chatty-average function called with 2 arguments")
+   (/ (+ a b) 2.0))
+  ([a b c]
+   (println "chatty-average function called with 3 arguments")
+   (/ (+ a b c) 3.0)))
+
+;; Pay attention to how & is used when defining variadic functions!
+
+;; & is a single symbol that indicates the function will take any number of arguments.
+;; It is white space separated from other arguments in the argument list 
+
+(defn print-any-args [& args] ; note the whitespace after `&`
+  (println "My arguments are:" args))
+
+(comment
+  (print-any-args "1" 2 3 '4 '[5 6 7]))
+
+;; compared to 
+; (defn print-any-args1 [&args]
+;   (println "My arguments are:" args)) 
+
+;; This will not compile. `args` is an unbound symbol because the symbol we incorrectly defined is `&args`
+;; Note the lack of whitespace after the `&` 
+;; So (println "My arguments are:" &args)) would compile but
+;; &args` is a single argument and the code would not match your intent so this would still be wrong
+
+;; In the Wild
+
+(defn =
+  "Equality. Returns true if x equals y, false if not. Same as
+ Java x.equals(y) except it also works for nil, and compares
+ numbers and collections in a type-independent manner.
+ Clojure's immutable data structures define equals()
+ (and thus =) as a value, not an identity, comparison."
+  ([x] true)
+  ([x y] (clojure.lang.Util/equiv x y))
+  ([x y & more]
+   (if (clojure.lang.Util/equiv x y)
+     (if (next more)
+       ;; `recur` uses the fn as the recursion point here. `recur` works with `fn` and `loop`.
+       ;; As this is a `fn` via `defn`, `recur` here is the same as calling `(= ...)`
+       (recur y (first more) (next more))  ;; Same as calling (= y (first more) (next more))
+       ;; (next ...) returns the remaining seq of items after the first item
+       (clojure.lang.Util/equiv y (first more)))
+     false)))
