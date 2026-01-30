@@ -1,4 +1,7 @@
-alias repl := rebel
+alias repl := nrepl
+
+nrepl:
+  clojure -M:repl/nrepl
 
 conjure:
   clojure -M:repl/conjure
